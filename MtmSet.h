@@ -18,8 +18,19 @@ namespace mtm{
          * A node in the set
          */
         class Node{
-            
+            Type element;
+            Node* next;
+        public:
+            explicit Node(Type new_element): element(new_element), next(NULL){};
+            const Type *operator->() const{
+                return &element;
+            }
+            Node* getNext() const{
+                return next;
+            }
         };
+
+        Node* head;
     
     public:
         //Forward declaration
@@ -28,37 +39,40 @@ namespace mtm{
         /**
          * A iterator for Set
         */
-        class iterator{       
+        class iterator{
+            Node* node_ptr;
         public:
             /**
              * Empty constructor. Should not be dereferenced.
              * Same as MtmSet::end()
              */
-            iterator(){}
+            iterator(): node_ptr(NULL){};
             
             /**
              * Constructor of Set iterator
              * @param node The node the iterator points to
              */
-            explicit iterator(Node *node){}
+            explicit iterator(Node *node){
+                node_ptr = node;
+            }
             
             /**
              * Copy constructor
              * @param it The iterator to copy
              */
-            iterator(const iterator& it){}
+            iterator(const iterator& it) = default;
 
             /**
              * Destructor
              */
-            ~iterator() {}
+            ~iterator() = default;
 
             /**
              * Copy assignment operator.
              * @param rhs The iterator to copy.
              * @return A reference to this iterator.
              */
-            iterator& operator=(const iterator& rhs){}
+            iterator& operator=(const iterator& rhs) = default;
             
             /**
              * Dereference operator * .
@@ -68,7 +82,9 @@ namespace mtm{
              * @throws NodeIsEndException if the iterator doesn't point to
              * an element in the set (end())
              */
-            const Type& operator*() const{}
+            const Type& operator*() const{
+                return *(node_ptr->);
+            }
             
             /**
              * Dereference operator -> .
@@ -80,7 +96,9 @@ namespace mtm{
              * @throws NodeIsEndException if the iterator doesn't point to
              * an element in the set (end())
              */
-            const Type *operator->() const{}
+            const Type *operator->() const{
+                return node_ptr->;
+            }
             
             /**
              * Prefix increment operator (++i)
@@ -88,7 +106,10 @@ namespace mtm{
              * @throws NodeIsEndException if the iterator doesn't point to
              * an element in the set (end())
              */
-            iterator& operator++(){}
+            iterator& operator++(){
+                this->node_ptr = (*node_ptr).getNext();
+                return *this;
+            }
             
             /**
              * Postfix increment operator (i++)
@@ -97,7 +118,11 @@ namespace mtm{
              * @throws NodeIsEndException if the iterator doesn't point to
              * an element in the set (end())
              */
-            iterator operator++(int){}
+            iterator operator++(int){
+                iterator tmp(*this);
+                ++(*this);
+                return tmp;
+            }
             
             /**
              * Compare an iterator with const_iterator. (when there is a
@@ -105,7 +130,9 @@ namespace mtm{
              * @param rhs the right const_iterator.
              * @return true if the two iterators point to the same node
              */
-            bool operator==(const const_iterator& rhs) const{}
+            bool operator==(const const_iterator& rhs) const{
+                return (rhs == *this);
+            }
             
             /**
              * Compare an iterator with const_iterator. (when there is a
@@ -113,7 +140,9 @@ namespace mtm{
              * @param rhs the right const_iterator.
              * @return true if the two iterators don't point to the same node
              */
-            bool operator!=(const const_iterator& rhs) const{}
+            bool operator!=(const const_iterator& rhs) const{
+                return !(*this == rhs);
+            }
 
             friend class const_iterator;
         };
@@ -122,44 +151,48 @@ namespace mtm{
          * A const_iterator for Set
         */
         class const_iterator{
-            
+            Node const* node_ptr;
         public:
             /**
              * Empty constructor. Should not be dereferenced.
              * Same as MtmSet::end()
              */
-            const_iterator(){}
+            const_iterator(): node_ptr(NULL){};
             
             /**
              * Constructor of Set const_iterator
              * @param node The node the const_iterator points to
              */
-            explicit const_iterator(Node *node){}
+            explicit const_iterator(Node *node){
+                node_ptr = node;
+            }
             
             /**
              * Copy constructor
              * @param it The const_iterator to copy
              */
-            const_iterator(const const_iterator& it){}
+            const_iterator(const const_iterator& it) = default;
             
             /**
              * Constructor from iterator (not const_iterator)
              * Allows casting from iterator to const_iterator
              * @param it The iterator to "copy" to a const_iterator
              */
-            const_iterator(const iterator& it){}
+            const_iterator(const iterator& it){
+                this->node_ptr = it.node_ptr;
+            }
 
             /**
              * Destructor
              */
-            ~const_iterator(){}
+            ~const_iterator() = default;
 
             /**
              * Copy assignment operator.
              * @param rhs The iterator to copy.
              * @return A reference to this const_iterator.
              */
-            const_iterator& operator=(const const_iterator& rhs){}
+            const_iterator& operator=(const const_iterator& rhs) = default;
             
             /**
              * Dereference operator * .
@@ -169,7 +202,9 @@ namespace mtm{
              * @throws NodeIsEndException if the iterator doesn't point to
              * an element in the set (end())
              */
-            const Type& operator*() const{}
+            const Type& operator*() const{
+                return *(node_ptr->);
+            }
             
             /**
              * Dereference operator -> .
@@ -181,7 +216,9 @@ namespace mtm{
              * @throws NodeIsEndException if the iterator doesn't point to
              * an element in the set (end())
              */
-            const Type *operator->() const{}
+            const Type *operator->() const{
+                return node_ptr->;
+            }
             
             /**
              * Prefix increment operator (++i)
@@ -189,7 +226,10 @@ namespace mtm{
              * @throws NodeIsEndException if the iterator doesn't point to
              * an element in the set (end())
              */
-            const_iterator& operator++(){}
+            const_iterator& operator++() {
+                node_ptr = (*node_ptr).getNext();
+                return *this;
+            }
             
             /**
              * Postfix increment operator (i++)
@@ -198,14 +238,20 @@ namespace mtm{
              * @throws NodeIsEndException if the iterator doesn't point to
              * an element in the set (end())
              */
-            const_iterator operator++(int){}
+            const_iterator operator++(int){
+                const_iterator tmp(*this);
+                ++(*this);
+                return tmp;
+            }
             
             /**
              * Compare two const_iterators.
              * @param rhs the right const_iterator
              * @return true if the two const_iterators point to the same node
              */
-            bool operator==(const const_iterator& rhs) const{}
+            bool operator==(const const_iterator& rhs) const{
+                return (this->node_ptr == rhs.node_ptr);
+            }
             
             /**
              * Compare two const_iterators.
@@ -213,14 +259,16 @@ namespace mtm{
              * @return true if the two const_iterators don't point to the same
              * node
              */
-            bool operator!=(const const_iterator& rhs) const{}
+            bool operator!=(const const_iterator& rhs) const{
+                return !(*this == rhs);
+            }
         };
         
         /**
          * Empty constructor
          * Creates an empty set
          */
-        MtmSet(){}
+        MtmSet(): head(NULL){};
         
         /**
          * Copy constructor
