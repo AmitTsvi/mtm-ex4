@@ -82,6 +82,9 @@ namespace mtm{
              * an element in the set (end())
              */
             const Type& operator*() const{
+                if (this->node_ptr == NULL){
+                    throw NodeIsEndException();
+                }
                 return node_ptr->element;
             }
             
@@ -96,6 +99,9 @@ namespace mtm{
              * an element in the set (end())
              */
             const Type *operator->() const{
+                if (this->node_ptr == NULL){
+                    throw NodeIsEndException();
+                }
                 return &(node_ptr->element);
             }
             
@@ -106,6 +112,9 @@ namespace mtm{
              * an element in the set (end())
              */
             iterator& operator++(){
+                if (this->node_ptr == NULL){
+                    throw NodeIsEndException();
+                }
                 this->node_ptr = node_ptr->next;
                 return *this;
             }
@@ -118,6 +127,9 @@ namespace mtm{
              * an element in the set (end())
              */
             iterator operator++(int){
+                if (this->node_ptr == NULL){
+                    throw NodeIsEndException();
+                }
                 iterator tmp(*this);
                 ++(*this);
                 return tmp;
@@ -202,6 +214,9 @@ namespace mtm{
              * an element in the set (end())
              */
             const Type& operator*() const{
+                if (this->node_ptr == NULL){
+                    throw NodeIsEndException();
+                }
                 return node_ptr->element;
             }
             
@@ -216,6 +231,9 @@ namespace mtm{
              * an element in the set (end())
              */
             const Type *operator->() const{
+                if (this->node_ptr == NULL){
+                    throw NodeIsEndException();
+                }
                 return &(node_ptr->element);
             }
             
@@ -226,6 +244,9 @@ namespace mtm{
              * an element in the set (end())
              */
             const_iterator& operator++() {
+                if (this->node_ptr == NULL){
+                    throw NodeIsEndException();
+                }
                 node_ptr = node_ptr->next;
                 return *this;
             }
@@ -238,6 +259,9 @@ namespace mtm{
              * an element in the set (end())
              */
             const_iterator operator++(int){
+                if (this->node_ptr == NULL){
+                    throw NodeIsEndException();
+                }
                 const_iterator tmp(*this);
                 ++(*this);
                 return tmp;
