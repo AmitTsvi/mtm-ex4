@@ -17,3 +17,9 @@ set(SOURCE_FILES
         World.h)
 
 add_executable(ex4 ${SOURCE_FILES})
+
+set(SOURCE_FILES
+        MtmSet.h
+        examplePart2.cpp)
+
+add_executable(set_test ${SOURCE_FILES})

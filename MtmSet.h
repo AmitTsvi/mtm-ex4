@@ -506,7 +506,7 @@ namespace mtm{
         bool operator==(const MtmSet& rhs) const{
             const_iterator left = this->begin();
             const_iterator right = rhs.begin();
-            while (left != this->end() && right != rhs.end()){
+            while ((left != this->end()) && (right != rhs.end())){
                 if (!(*left == *right)){
                     return false;
                 }
