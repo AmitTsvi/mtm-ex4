@@ -5,7 +5,8 @@
 #include <ostream>
 
 namespace mtm{
-    
+
+
     enum FIGHT_RESULT{
         WON, LOST, DRAW
     };
@@ -14,7 +15,144 @@ namespace mtm{
     * A Family group of hunter-gatherers.
     */
     class Group{
+        //Private:
+        const int adult_power_factor = 10;
+        const int children_power_factor = 3;
+        const int tools_power_factor = 10;
+        const int food_power_factor = 1;
+        const int power_divide = 100;
+        const int full = 100;
+        const int empty = 0;
+        const int same = 0;
+        /**
+         * Fight constants
+         */
+        //Losing factors
+        const int lost_children_mul_factor = 1;
+        const int lost_children_div_factor = 3;
+        const int lost_adults_mul_factor = 1;
+        const int lost_adults_div_factor = 3;
+        const int lost_tools_mul_factor = 1;
+        const int lost_tools_div_factor = 2;
+        const int lost_food_mul_factor = 1;
+        const int lost_food_div_factor = 2;
+        const int lost_morale = 20; //Lost 20%
+        //Winning factors
+        const int won_children_mul_factor = 1;
+        const int won_children_div_factor = 1;
+        const int won_adults_mul_factor = 1;
+        const int won_adults_div_factor = 4;
+        const int won_tools_mul_factor = 1;
+        const int won_tools_div_factor = 4;
+        const int won_food_mul_factor = 1;
+        const int won_food_div_factor = 2;
+        const int won_morale = 20; //Won 20%
 
+        std::string name, clan;
+        int children, adults, tools, food, morale;
+
+        /**
+         * Calculates and initiate the power of the group.
+         */
+        double calcPower() const
+        {
+            int people_factor = adult_power_factor * adults
+                                + children_power_factor * children;
+            int other_factor = tools_power_factor * tools
+                               + food_power_factor * food;
+            double power = ((double)(people_factor * other_factor * morale))
+                    / power_divide;
+            return power;
+        }
+
+        /**
+         * Compares two Groups, by the power (if the power is the same then
+         * compares by the name) returns the difference between the two.
+         * If the powers are different
+         * @param rhs
+         * @return
+         * If the powers are different - returned rhs(power) - this(power),
+         * if the powers are same - returned rhs(name) - this(name)
+         */
+        double compareGroups(const Group &rhs) const
+        {
+            double powerDiff = rhs.calcPower() - calcPower();
+            if(powerDiff != same) {
+                return powerDiff;
+            }
+            else {
+                //rhs.power == this->power
+                return ((double)(rhs.name.compare(name)));
+            }
+        }
+
+        /**
+         * Handles fight effects,
+         * the this group is the winning group and the loser is the losing group.
+         * @param lost
+         */
+        void handleFightEffects(Group& loser){
+            //Ceiling
+            loser.children -= ((lost_children_mul_factor * children
+                        + lost_children_div_factor -1) / lost_children_div_factor);
+            //Ceiling
+            loser.adults -= ((lost_adults_mul_factor * adults
+                      + lost_adults_div_factor -1) / lost_adults_div_factor);
+            //Ceiling
+            loser.tools -= ((lost_tools_mul_factor * tools
+                      + lost_tools_div_factor -1) / lost_tools_div_factor);
+            //Ceiling
+            int food_lost = ((lost_food_mul_factor * food
+                              + lost_food_div_factor -1) / lost_food_div_factor);
+            loser.food -= food_lost;
+            //Ceiling
+            loser.morale -= ((lost_morale * morale + 100 -1) / 100);
+            if (loser.morale < empty) {
+                loser.morale = empty;
+            }
+            //Floor
+            children += ((won_children_mul_factor * children)
+                        / won_children_div_factor);
+            //Floor
+            adults += ((won_adults_mul_factor * adults)
+                      / won_adults_div_factor);
+            //Floor
+            tools += ((won_tools_mul_factor * tools)
+                     / won_tools_div_factor);
+            //Floor
+            food += (won_food_mul_factor * food_lost) / won_food_div_factor;
+            //Ceiling
+            morale += ((won_morale * adults + 100 -1) / 100);
+            if (morale > full) {
+                morale = full;
+            }
+        }
+
+        /**
+         * calculates abs.
+         * @return abs.
+         */
+        static int abs(int num) {
+            return (num > 0) ? num : (-num);
+        }
+
+        /**
+         * makes a trade exchange, the this group has initially more food.
+         * @param other
+         * @param trade
+         */
+        void trade(Group& other, int trade) {
+            if (food < trade) {
+                trade = food;
+            }
+            if (other.tools < trade) {
+                trade = other.tools;
+            }
+            food -= trade;
+            tools += trade;
+            other.food += trade;
+            other.tools -= trade;
+        }
     public:
         /**
          * Constructor
@@ -54,11 +192,11 @@ namespace mtm{
          * Copy constructor
          * @param other The group to copy
          */
-        Group(const Group& other);
+        Group(const Group& other) = default;
         
         /** Destructor
          */
-        ~Group();
+        ~Group() = default;
         
         /**
          * Get the name of the group

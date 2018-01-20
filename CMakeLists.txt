@@ -9,7 +9,8 @@ set(SOURCE_FILES
         Clan.h
         examplePart1.cpp
         examplePart2.cpp
-        examplePart3.cpp
+        examplePart2.cpp
+        Group.cpp
         exceptions.h
         Group.h
         MtmSet.h
