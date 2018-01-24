@@ -22,3 +22,8 @@ add_executable(Group_tests Group.h Group.cpp exceptions.h testMacros.h testsPart
 set(SOURCE_FILES
         Group.h Group.cpp exceptions.h testMacros.h testsPart1.cpp)
 
+set(SOURCE_FILES
+        MtmSet.h
+        examplePart2.cpp)
+
+add_executable(examplePart2 ${SOURCE_FILES})
