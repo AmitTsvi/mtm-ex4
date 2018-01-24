@@ -335,7 +335,7 @@ namespace mtm{
                 insert = insert->next;
             }
             insert->next = new Node(elem);
-            return iterator(insert);
+            return iterator(insert->next);
         }
         
         /**
@@ -345,7 +345,7 @@ namespace mtm{
          * @param elem the element to remove.
          */
         void erase(const Type& elem){
-            if (!this->contains(elem)) return;
+            if (!(this->contains(elem))) return;
             if (head->element == elem){
                 Node *temp = head->next;
                 delete head;
@@ -358,7 +358,9 @@ namespace mtm{
                     Node *temp = erase->next->next;
                     delete erase->next;
                     erase->next = temp;
+                    return;
                 }
+                erase = erase->next;
             }
         }
         
@@ -487,6 +489,7 @@ namespace mtm{
          * @return True if the given set is a subset of this set.
          */
         bool isSuperSetOf(const MtmSet& subset) const{
+            if (subset.empty()) return true;
             const_iterator it = subset.begin();
             while(it != subset.end()){
                 if (!this->contains(*it)){
@@ -504,20 +507,9 @@ namespace mtm{
          *  otherwise.
          */
         bool operator==(const MtmSet& rhs) const{
-            const_iterator left = this->begin();
-            const_iterator right = rhs.begin();
-            while ((left != this->end()) && (right != rhs.end())){
-                if (!(*left == *right)){
-                    return false;
-                }
-                left++;
-                right++;
-            }
-            if (left == right){
-                return true;
-            } else {
-                return false;
-            }
+            bool result1 = this->isSuperSetOf(rhs);
+            bool result2 = rhs.isSuperSetOf(*this);
+            return (result1 && result2);
         }
         
         /**
@@ -605,8 +597,8 @@ namespace mtm{
             while (it != this->end()){
                 if (!(condition(*it))){
                     iterator temp(it);
-                    erase(temp);
                     it++;
+                    erase(temp);
                 } else {
                     it++;
                 }

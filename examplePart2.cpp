@@ -57,8 +57,282 @@ bool setInsertTest(){
 }
 
 bool setEraseByElementTest(){
-        return true;
+    MtmSet<int> set;
+    ASSERT_NO_EXCEPTION(set.insert(5));
+    ASSERT_NO_EXCEPTION(set.erase(5));
+    ASSERT_TRUE(set.begin() == set.end());
+    ASSERT_NO_EXCEPTION(set.insert(2));
+    ASSERT_NO_EXCEPTION(set.insert(7));
+    ASSERT_NO_EXCEPTION(set.insert(3));
+    ASSERT_TRUE(set.contains(2));
+    ASSERT_NO_EXCEPTION(set.erase(2));
+    ASSERT_FALSE(set.contains(2));
+    ASSERT_TRUE(set.size() == 2);
+    ASSERT_TRUE(*(set.begin()) == 7);
+    ASSERT_NO_EXCEPTION(set.insert(6));
+    ASSERT_NO_EXCEPTION(set.erase(3));
+    ASSERT_TRUE(set.size() == 2);
+    MtmSet<int>::iterator it = set.find(6);
+    ASSERT_NO_EXCEPTION(set.erase(22));
+    ASSERT_TRUE(*it == 6);
+    return true;
 }
+
+bool setEraseByItTest(){
+    MtmSet<int> set;
+    MtmSet<int>::iterator it1 = set.insert(5);
+    ASSERT_NO_EXCEPTION(set.erase(it1));
+    ASSERT_TRUE(set.begin() == set.end());
+    ASSERT_NO_EXCEPTION(set.insert(2));
+    ASSERT_NO_EXCEPTION(set.insert(7));
+    ASSERT_NO_EXCEPTION(set.insert(3));
+    it1 = set.find(2);
+    ASSERT_NO_EXCEPTION(set.erase(it1));
+    ASSERT_FALSE(set.contains(2));
+    ASSERT_TRUE(set.size() == 2);
+    ASSERT_TRUE(*(set.begin()) == 7);
+    ASSERT_NO_EXCEPTION(set.insert(6));
+    ASSERT_NO_EXCEPTION(set.erase(3));
+    ASSERT_TRUE(set.size() == 2);
+    return true;
+}
+
+bool setSizeTest(){
+    MtmSet<int> set;
+    set.insert(7);
+    set.insert(8);
+    set.insert(123);
+    ASSERT_TRUE(set.size() == 3);
+    set.erase(7);
+    ASSERT_TRUE(set.size() == 2);
+    set.insert(123);
+    ASSERT_TRUE(set.size() == 2);
+    return true;
+}
+
+bool setEmptyTest(){
+    MtmSet<int> set;
+    ASSERT_TRUE(set.empty());
+    set.insert(3);
+    ASSERT_FALSE(set.empty());
+    return true;
+}
+
+bool setClearTest(){
+    MtmSet<int> set;
+    set.insert(7);
+    ASSERT_NO_EXCEPTION(set.clear());
+    ASSERT_TRUE(set.begin() == set.end());
+    set.insert(9);
+    set.insert(2);
+    set.insert(4);
+    ASSERT_NO_EXCEPTION(set.clear());
+    ASSERT_TRUE(set.begin() == set.end());
+    return true;
+}
+
+bool setBeginTest(){
+    MtmSet<int> set;
+    const MtmSet<int>& cset = set;
+    ASSERT_TRUE(set.begin() == set.end());
+    ASSERT_TRUE(cset.begin() == cset.end());
+    set.insert(3);
+    ASSERT_TRUE(*set.begin() == 3);
+    ASSERT_TRUE(*cset.begin() == 3);
+    set.insert(7);
+    ASSERT_TRUE(*set.begin() == 3);
+    ASSERT_TRUE(*cset.begin() == 3);
+    return true;
+}
+
+bool setFindTest(){
+    MtmSet<int> set;
+    const MtmSet<int>& cset = set;
+    set.insert(3);
+    MtmSet<int>::iterator it = set.find(3);
+    MtmSet<int>::const_iterator cit = cset.find(3);
+    ASSERT_TRUE(*it == 3);
+    ASSERT_TRUE(*cit == 3);
+    ASSERT_TRUE(++it == set.end());
+    ASSERT_TRUE(++cit == set.end());
+    set.insert(1);
+    set.insert(5);
+    set.insert(7);
+    it = set.find(5);
+    cit = set.find(5);
+    ASSERT_TRUE(*it == 5);
+    ASSERT_TRUE(*cit == 5);
+    ASSERT_TRUE(*(++it) == 7);
+    ASSERT_TRUE(*(++cit) == 7);
+    return true;
+}
+
+bool setContainsTest(){
+    MtmSet<int> set;
+    set.insert(3);
+    set.insert(4);
+    set.insert(7);
+    ASSERT_TRUE(set.contains(3));
+    ASSERT_TRUE(set.contains(4));
+    ASSERT_TRUE(set.contains(7));
+    ASSERT_FALSE(set.contains(2));
+    return true;
+}
+
+bool setIsSuperSetOfTest(){
+    MtmSet<int> setA;
+    MtmSet<int> setB;
+    ASSERT_TRUE(setA.isSuperSetOf(setB));
+    setA.insert(1);
+    setB.insert(1);
+    ASSERT_TRUE(setA.isSuperSetOf(setB));
+    setA.insert(2);
+    ASSERT_TRUE(setA.isSuperSetOf(setB));
+    setB.insert(3);
+    ASSERT_FALSE(setA.isSuperSetOf(setB));
+    return true;
+}
+
+bool setEqualOperatorTest(){
+    MtmSet<int> setA;
+    MtmSet<int> setB;
+    ASSERT_TRUE(setA == setB);
+    setA.insert(1);
+    setB.insert(1);
+    ASSERT_TRUE(setA == setB);
+    setA.insert(2);
+    ASSERT_FALSE(setA == setB);
+    setB.insert(3);
+    ASSERT_FALSE(setA == setB);
+    setA.insert(3);
+    setB.insert(2);
+    ASSERT_TRUE(setA == setB)
+    return true;
+}
+
+bool setUniteTest(){
+    MtmSet<int> set1;
+    MtmSet<int> set2;
+    set2.insert(2);
+    set1.unite(set2);
+    ASSERT_TRUE(*(set1.begin()) == 2);
+    set1.insert(3);
+    set2.insert(4);
+    set1.unite(set2);
+    ASSERT_TRUE(set1.contains(3));
+    ASSERT_TRUE(set2.contains(4));
+    ASSERT_TRUE(set1.size() == 3);
+    MtmSet<int> set3;
+    set1.unite(set3);
+    ASSERT_TRUE(set1.size() == 3);
+    return true;
+}
+
+bool setUniteTestConst(){
+    const MtmSet<int> eset1;
+    const MtmSet<int> eset2;
+    MtmSet<int> set3 = eset1.unite(eset2);
+    ASSERT_TRUE(set3.empty());
+    MtmSet<int> set1;
+    MtmSet<int> set2;
+    set1.insert(1);
+    set1.insert(3);
+    set2.insert(2);
+    set2.insert(4);
+    set2.insert(3);
+    const MtmSet<int> cset1 = set1;
+    const MtmSet<int> cset2 = set2;
+    MtmSet<int> set6 = cset1.unite(cset2);
+    ASSERT_TRUE(set6.size() == 4);
+
+    const MtmSet<int> cset4;
+    MtmSet<int> set5 = cset4.unite(cset1);
+    ASSERT_TRUE(set5 == set1);
+    return true;
+}
+
+bool setIntersectTest(){
+    MtmSet<int> set1;
+    MtmSet<int> set2;
+    set1.intersect(set2);
+    ASSERT_TRUE(set1.empty());
+    set1.insert(1);
+    set1.intersect(set2);
+    ASSERT_TRUE(set1.empty());
+    set1.insert(1);
+    set1.insert(2);
+    set1.insert(3);
+    set2.insert(3);
+    set2.insert(7);
+    set2.insert(1);
+    set1.intersect(set2);
+    ASSERT_TRUE(set1.size() == 2);
+    ASSERT_TRUE(set1.contains(1));
+    ASSERT_TRUE(set1.contains(3));
+    return true;
+}
+
+bool setIntersectTestConst(){
+    const MtmSet<int> eset1;
+    const MtmSet<int> eset2;
+    MtmSet<int> set3 = eset1.intersect(eset2);
+    ASSERT_TRUE(set3.empty());
+    MtmSet<int> set1;
+    MtmSet<int> set2;
+    set1.insert(1);
+    set1.insert(3);
+    set2.insert(2);
+    set2.insert(4);
+    set2.insert(3);
+    const MtmSet<int> cset1 = set1;
+    const MtmSet<int> cset2 = set2;
+    MtmSet<int> set6 = cset1.intersect(cset2);
+    ASSERT_TRUE(set6.size() == 1);
+    ASSERT_TRUE(set6.contains(3));
+
+    const MtmSet<int> cset4;
+    MtmSet<int> set5 = cset4.intersect(cset1);
+    ASSERT_TRUE(set5.empty());
+    return true;
+}
+
+bool setGetSubSetTest(){
+    MtmSet<int> set;
+    set.getSubSet(isEven);
+    ASSERT_TRUE(set.empty());
+    set.insert(1);
+    set.insert(3);
+    set.getSubSet(isEven);
+    ASSERT_TRUE(set.empty());
+    set.insert(1);
+    set.insert(2);
+    set.insert(3);
+    set.insert(4);
+    set.getSubSet(isEven);
+    ASSERT_TRUE(set.size() == 2);
+    ASSERT_TRUE(set.contains(2));
+    ASSERT_TRUE(set.contains(4));
+    return true;
+}
+
+bool setGetSubSetTestConst(){
+    const MtmSet<int> eset1;
+    MtmSet<int> eset2 = eset1.getSubSet(isEven);
+    ASSERT_TRUE(eset2.empty());
+
+    MtmSet<int> set1;
+    set1.insert(1);
+    set1.insert(3);
+    set1.insert(2);
+    set1.insert(4);
+    const MtmSet<int> cset1 = set1;
+    MtmSet<int> set6 = cset1.getSubSet(isEven);
+    ASSERT_TRUE(set6.size() == 2);
+    ASSERT_TRUE(set6.contains(2));
+    ASSERT_TRUE(set6.contains(4));
+    return true;
+}
+
 
 bool exampleSet(){
     MtmSet<int> set;
@@ -96,5 +370,19 @@ int main(){
     RUN_TEST(setCopyCtorTest);
     RUN_TEST(setInsertTest);
     RUN_TEST(setEraseByElementTest);
+    RUN_TEST(setEraseByItTest);
+    RUN_TEST(setSizeTest);
+    RUN_TEST(setEmptyTest);
+    RUN_TEST(setClearTest);
+    RUN_TEST(setBeginTest);
+    RUN_TEST(setFindTest);
+    RUN_TEST(setContainsTest);
+    RUN_TEST(setIsSuperSetOfTest);
+    RUN_TEST(setEqualOperatorTest);
+    RUN_TEST(setUniteTest);
+    RUN_TEST(setUniteTestConst);
+    RUN_TEST(setIntersectTest);
+    RUN_TEST(setIntersectTestConst)
+    RUN_TEST(setGetSubSetTest);
     return 0;
 }
