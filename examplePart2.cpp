@@ -211,10 +211,128 @@ bool setEqualOperatorTest(){
 }
 
 bool setUniteTest(){
-
-
+    MtmSet<int> set1;
+    MtmSet<int> set2;
+    set2.insert(2);
+    set1.unite(set2);
+    ASSERT_TRUE(*(set1.begin()) == 2);
+    set1.insert(3);
+    set2.insert(4);
+    set1.unite(set2);
+    ASSERT_TRUE(set1.contains(3));
+    ASSERT_TRUE(set2.contains(4));
+    ASSERT_TRUE(set1.size() == 3);
+    MtmSet<int> set3;
+    set1.unite(set3);
+    ASSERT_TRUE(set1.size() == 3);
     return true;
 }
+
+bool setUniteTestConst(){
+    const MtmSet<int> eset1;
+    const MtmSet<int> eset2;
+    MtmSet<int> set3 = eset1.unite(eset2);
+    ASSERT_TRUE(set3.empty());
+    MtmSet<int> set1;
+    MtmSet<int> set2;
+    set1.insert(1);
+    set1.insert(3);
+    set2.insert(2);
+    set2.insert(4);
+    set2.insert(3);
+    const MtmSet<int> cset1 = set1;
+    const MtmSet<int> cset2 = set2;
+    MtmSet<int> set6 = cset1.unite(cset2);
+    ASSERT_TRUE(set6.size() == 4);
+
+    const MtmSet<int> cset4;
+    MtmSet<int> set5 = cset4.unite(cset1);
+    ASSERT_TRUE(set5 == set1);
+    return true;
+}
+
+bool setIntersectTest(){
+    MtmSet<int> set1;
+    MtmSet<int> set2;
+    set1.intersect(set2);
+    ASSERT_TRUE(set1.empty());
+    set1.insert(1);
+    set1.intersect(set2);
+    ASSERT_TRUE(set1.empty());
+    set1.insert(1);
+    set1.insert(2);
+    set1.insert(3);
+    set2.insert(3);
+    set2.insert(7);
+    set2.insert(1);
+    set1.intersect(set2);
+    ASSERT_TRUE(set1.size() == 2);
+    ASSERT_TRUE(set1.contains(1));
+    ASSERT_TRUE(set1.contains(3));
+    return true;
+}
+
+bool setIntersectTestConst(){
+    const MtmSet<int> eset1;
+    const MtmSet<int> eset2;
+    MtmSet<int> set3 = eset1.intersect(eset2);
+    ASSERT_TRUE(set3.empty());
+    MtmSet<int> set1;
+    MtmSet<int> set2;
+    set1.insert(1);
+    set1.insert(3);
+    set2.insert(2);
+    set2.insert(4);
+    set2.insert(3);
+    const MtmSet<int> cset1 = set1;
+    const MtmSet<int> cset2 = set2;
+    MtmSet<int> set6 = cset1.intersect(cset2);
+    ASSERT_TRUE(set6.size() == 1);
+    ASSERT_TRUE(set6.contains(3));
+
+    const MtmSet<int> cset4;
+    MtmSet<int> set5 = cset4.intersect(cset1);
+    ASSERT_TRUE(set5.empty());
+    return true;
+}
+
+bool setGetSubSetTest(){
+    MtmSet<int> set;
+    set.getSubSet(isEven);
+    ASSERT_TRUE(set.empty());
+    set.insert(1);
+    set.insert(3);
+    set.getSubSet(isEven);
+    ASSERT_TRUE(set.empty());
+    set.insert(1);
+    set.insert(2);
+    set.insert(3);
+    set.insert(4);
+    set.getSubSet(isEven);
+    ASSERT_TRUE(set.size() == 2);
+    ASSERT_TRUE(set.contains(2));
+    ASSERT_TRUE(set.contains(4));
+    return true;
+}
+
+bool setGetSubSetTestConst(){
+    const MtmSet<int> eset1;
+    MtmSet<int> eset2 = eset1.getSubSet(isEven);
+    ASSERT_TRUE(eset2.empty());
+
+    MtmSet<int> set1;
+    set1.insert(1);
+    set1.insert(3);
+    set1.insert(2);
+    set1.insert(4);
+    const MtmSet<int> cset1 = set1;
+    MtmSet<int> set6 = cset1.getSubSet(isEven);
+    ASSERT_TRUE(set6.size() == 2);
+    ASSERT_TRUE(set6.contains(2));
+    ASSERT_TRUE(set6.contains(4));
+    return true;
+}
+
 
 bool exampleSet(){
     MtmSet<int> set;
@@ -261,5 +379,10 @@ int main(){
     RUN_TEST(setContainsTest);
     RUN_TEST(setIsSuperSetOfTest);
     RUN_TEST(setEqualOperatorTest);
+    RUN_TEST(setUniteTest);
+    RUN_TEST(setUniteTestConst);
+    RUN_TEST(setIntersectTest);
+    RUN_TEST(setIntersectTestConst)
+    RUN_TEST(setGetSubSetTest);
     return 0;
 }
