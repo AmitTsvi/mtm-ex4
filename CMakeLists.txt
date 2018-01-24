@@ -23,6 +23,8 @@ set(SOURCE_FILES
         Group.h Group.cpp exceptions.h testMacros.h testsPart1.cpp)
 
 set(SOURCE_FILES
+        exceptions.h
+        testMacros.h
         MtmSet.h
         examplePart2.cpp)
 
