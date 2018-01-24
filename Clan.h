@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Group.h"
+#include "MtmSet.h"
 #include <ostream>
 #include <memory>
 
@@ -16,7 +17,59 @@ namespace mtm{
      * lost all of its people, will be removed from the clan.
      */
     class Clan{
-    
+    private:
+
+        std::string clan_name; //Clan's name
+        MtmSet<GroupPointer> clan_groups; //Clan's groups
+        MtmSet<std::string> clan_friends; //Clan's (other clans) friends
+
+        /**
+         * Gets clan and a new name and changes all the group's
+         * clans in clan to the new clan name.
+         * @param clan - the clan in which to change the groups
+         * @param new_name - the new clans name
+         */
+        friend void changeClanNameInGroups
+                (Clan& clan, const std::string& new_name){
+            for (MtmSet<GroupPointer>::iterator it = (clan.clan_groups).begin();
+                 it != (clan.clan_groups).end(); ++it) {
+                (*it)->changeClan(new_name);
+            }
+        }
+
+        /**
+         * Gets two clans and checks if there
+         * is two groups with the same name
+         * in the two clans.
+         * @param clan
+         * @param other
+         * @return False - if there is no group with the same name in the clans
+         * True - if there is a group with the same name in the clans
+         */
+        friend bool isSameGroupsInTwoClans(const Clan& clan, const Clan& other){
+            for (MtmSet<GroupPointer>::iterator outer_it =
+                    (clan.clan_groups).begin();
+                 outer_it != (clan.clan_groups).end(); ++outer_it) {
+                for (MtmSet<GroupPointer>::iterator inner_it =
+                        (other.clan_groups).begin();
+                     inner_it != (other.clan_groups).end(); ++inner_it) {
+                        if ((*outer_it)->getName() == (*inner_it)->getName()) {
+                            return true;
+                        }
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Gets friend clans name and a clan and adds it to the clan friends.
+         * @param clan - to add friend in the given clan
+         * @param friend_clan - the friend to add
+         */
+        friend void addFriend(Clan& clan, const std::string& friend_clan){
+            (clan.clan_friends).insert(friend_clan);
+        }
+
     public:
         /**
          * Constructor
@@ -28,7 +81,7 @@ namespace mtm{
         /**
          * Copy constructor.
          */
-        Clan(const Clan& other);
+        Clan(const Clan& other) = default;
 
         /**
          * Disable assignment operator
@@ -38,7 +91,7 @@ namespace mtm{
         /**
          * Destructor
          */
-        ~Clan();
+        ~Clan() = default;
         
         /**
          * Add a group (copy of it) to the clan
