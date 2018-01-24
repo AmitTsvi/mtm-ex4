@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror -pedantic-error
 set(SOURCE_FILES
         Area.h
         Clan.h
-        examplePart1.cpp
+        testsPart1.cpp
         examplePart2.cpp
         examplePart2.cpp
         Group.cpp
@@ -17,10 +17,8 @@ set(SOURCE_FILES
         testMacros.h
         World.h)
 
-add_executable(ex4 ${SOURCE_FILES})
+add_executable(Group_tests Group.h Group.cpp exceptions.h testMacros.h testsPart1.cpp)
 
 set(SOURCE_FILES
-        MtmSet.h
-        examplePart2.cpp)
+        Group.h Group.cpp exceptions.h testMacros.h testsPart1.cpp)
 
-add_executable(set_test ${SOURCE_FILES})

@@ -38,7 +38,7 @@ namespace mtm{
         const int lost_food_div_factor = 2;
         const int lost_morale = 20; //Lost 20%
         //Winning factors
-        const int won_children_mul_factor = 1;
+        const int won_children_mul_factor = 0;
         const int won_children_div_factor = 1;
         const int won_adults_mul_factor = 1;
         const int won_adults_div_factor = 4;
@@ -93,36 +93,53 @@ namespace mtm{
          */
         void handleFightEffects(Group& loser){
             //Ceiling
-            loser.children -= ((lost_children_mul_factor * children
-                        + lost_children_div_factor -1) / lost_children_div_factor);
+            if (loser.children != empty) {
+                loser.children -= ((lost_children_mul_factor * loser.children
+                                    + lost_children_div_factor - 1) /
+                        lost_children_div_factor);
+            }
             //Ceiling
-            loser.adults -= ((lost_adults_mul_factor * adults
-                      + lost_adults_div_factor -1) / lost_adults_div_factor);
+            if (loser.adults != empty) {
+                loser.adults -= ((lost_adults_mul_factor * loser.adults
+                                  + lost_adults_div_factor - 1) /
+                                 lost_adults_div_factor);
+            }
             //Ceiling
-            loser.tools -= ((lost_tools_mul_factor * tools
-                      + lost_tools_div_factor -1) / lost_tools_div_factor);
+            if (loser.tools != empty) {
+                loser.tools -= ((lost_tools_mul_factor * loser.tools
+                                 + lost_tools_div_factor - 1) /
+                                lost_tools_div_factor);
+            }
             //Ceiling
-            int food_lost = ((lost_food_mul_factor * food
-                              + lost_food_div_factor -1) / lost_food_div_factor);
-            loser.food -= food_lost;
+            int food_lost = empty;
+            if (loser.food != empty) {
+                food_lost = ((lost_food_mul_factor * loser.food
+                                  + lost_food_div_factor - 1) /
+                                 lost_food_div_factor);
+                loser.food -= food_lost;
+            }
             //Ceiling
-            loser.morale -= ((lost_morale * morale + 100 -1) / 100);
+            loser.morale -= ((lost_morale * loser.morale + 100 -1) / 100);
             if (loser.morale < empty) {
                 loser.morale = empty;
             }
             //Floor
-            children += ((won_children_mul_factor * children)
-                        / won_children_div_factor);
+            children += ((won_children_mul_factor * children) /
+                    won_children_div_factor);
             //Floor
-            adults += ((won_adults_mul_factor * adults)
-                      / won_adults_div_factor);
+            if (adults != empty) {
+                adults -= ((won_adults_mul_factor * adults)
+                           / won_adults_div_factor);
+            }
             //Floor
-            tools += ((won_tools_mul_factor * tools)
-                     / won_tools_div_factor);
+            if (tools != empty) {
+                tools -= ((won_tools_mul_factor * tools)
+                          / won_tools_div_factor);
+            }
             //Floor
             food += (won_food_mul_factor * food_lost) / won_food_div_factor;
             //Ceiling
-            morale += ((won_morale * adults + 100 -1) / 100);
+            morale += ((won_morale * morale + 100 -1) / 100);
             if (morale > full) {
                 morale = full;
             }

@@ -26,8 +26,11 @@ namespace mtm {
         if (morale < empty || morale > max_morale) {
             throw GroupInvalidArgs();
         }
+        if (name.empty()) {
+            throw GroupInvalidArgs();
+        }
         this->name = name;
-        this->clan = clan;
+        this->clan = clan; //a clan can be empty - empty sting mean no clan
         this->children = children;
         this->adults = adults;
         this->tools = tools;
@@ -40,6 +43,9 @@ namespace mtm {
             throw GroupInvalidArgs();
         }
         if (children == empty && adults == empty) {
+            throw GroupInvalidArgs();
+        }
+        if (name.empty()) {
             throw GroupInvalidArgs();
         }
         this->name = name;
@@ -73,6 +79,9 @@ namespace mtm {
         if ((this->clan).empty()) {
             this->clan = clan;
             morale = (int) (((double) morale) * morale_inc);
+            if (morale > max_morale) {
+                morale = max_morale;
+            }
             return;
         }
             //If the group was part of a clan and the new clan
@@ -118,7 +127,7 @@ namespace mtm {
             return false;
         }
         int total_size = getSize() + other.getSize();
-        if (total_size >= max_amount) {
+        if (total_size > max_amount) {
             return false;
         }
         if (morale < min_morale_to_unite || other.morale < min_morale_to_unite) {
@@ -128,12 +137,11 @@ namespace mtm {
         if (other.calcPower() > calcPower()) {
             name = other.name;
         }
+        int morale_tmp = ((getSize() * morale + other.getSize() * other.morale)/(total_size));
         children += other.children;
         adults += other.adults;
         tools += other.tools;
         food += other.food;
-        int morale_tmp = ((getSize() * morale + other.getSize() * other.morale)
-                          / (total_size));
         morale = morale_tmp;
         //Empty the other group
         other.name = "";
