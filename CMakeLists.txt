@@ -17,8 +17,12 @@ set(SOURCE_FILES
         testMacros.h
         World.h)
 
-add_executable(Group_tests Group.h Group.cpp exceptions.h testMacros.h testsPart1.cpp)
+add_executable(Group_tests Group.h Group.cpp exceptions.h testMacros.h Group_test.cpp)
 
 set(SOURCE_FILES
-        Group.h Group.cpp exceptions.h testMacros.h testsPart1.cpp)
+        Group.h Group.cpp exceptions.h testMacros.h Group_test.cpp)
 
+#add_executable(Clan.h Clan.cpp MtmSet.h Group.h Group.cpp)
+
+#set(SOURCE_FILES
+#        Clan.h Clan.cpp MtmSet.h Group.h Group.cpp)

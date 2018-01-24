@@ -48,22 +48,14 @@ namespace mtm{
         const int won_food_div_factor = 2;
         const int won_morale = 20; //Won 20%
 
+        //----------------------------------------------------------------------
         std::string name, clan;
         int children, adults, tools, food, morale;
-
+        //----------------------------------------------------------------------
         /**
          * Calculates and initiate the power of the group.
          */
-        double calcPower() const
-        {
-            int people_factor = adult_power_factor * adults
-                                + children_power_factor * children;
-            int other_factor = tools_power_factor * tools
-                               + food_power_factor * food;
-            double power = ((double)(people_factor * other_factor * morale))
-                    / power_divide;
-            return power;
-        }
+        double calcPower() const;
 
         /**
          * Compares two Groups, by the power (if the power is the same then
@@ -74,76 +66,21 @@ namespace mtm{
          * If the powers are different - returned rhs(power) - this(power),
          * if the powers are same - returned rhs(name) - this(name)
          */
-        double compareGroups(const Group &rhs) const
-        {
-            double powerDiff = rhs.calcPower() - calcPower();
-            if(powerDiff != same) {
-                return powerDiff;
-            }
-            else {
-                //rhs.power == this->power
-                return ((double)(rhs.name.compare(name)));
-            }
-        }
+        double compareGroups(const Group &rhs) const;
 
         /**
          * Handles fight effects,
          * the this group is the winning group and the loser is the losing group.
          * @param lost
          */
-        void handleFightEffects(Group& loser){
-            //Ceiling
-            if (loser.children != empty) {
-                loser.children -= ((lost_children_mul_factor * loser.children
-                                    + lost_children_div_factor - 1) /
-                        lost_children_div_factor);
-            }
-            //Ceiling
-            if (loser.adults != empty) {
-                loser.adults -= ((lost_adults_mul_factor * loser.adults
-                                  + lost_adults_div_factor - 1) /
-                                 lost_adults_div_factor);
-            }
-            //Ceiling
-            if (loser.tools != empty) {
-                loser.tools -= ((lost_tools_mul_factor * loser.tools
-                                 + lost_tools_div_factor - 1) /
-                                lost_tools_div_factor);
-            }
-            //Ceiling
-            int food_lost = empty;
-            if (loser.food != empty) {
-                food_lost = ((lost_food_mul_factor * loser.food
-                                  + lost_food_div_factor - 1) /
-                                 lost_food_div_factor);
-                loser.food -= food_lost;
-            }
-            //Ceiling
-            loser.morale -= ((lost_morale * loser.morale + 100 -1) / 100);
-            if (loser.morale < empty) {
-                loser.morale = empty;
-            }
-            //Floor
-            children += ((won_children_mul_factor * children) /
-                    won_children_div_factor);
-            //Floor
-            if (adults != empty) {
-                adults -= ((won_adults_mul_factor * adults)
-                           / won_adults_div_factor);
-            }
-            //Floor
-            if (tools != empty) {
-                tools -= ((won_tools_mul_factor * tools)
-                          / won_tools_div_factor);
-            }
-            //Floor
-            food += (won_food_mul_factor * food_lost) / won_food_div_factor;
-            //Ceiling
-            morale += ((won_morale * morale + 100 -1) / 100);
-            if (morale > full) {
-                morale = full;
-            }
-        }
+        void handleFightEffects(Group& loser);
+
+        /**
+        * makes a trade exchange, the this group has initially more food.
+        * @param other
+        * @param trade
+        */
+        void trade(Group& other, int trade);
 
         /**
          * calculates abs.
@@ -151,24 +88,6 @@ namespace mtm{
          */
         static int abs(int num) {
             return (num > 0) ? num : (-num);
-        }
-
-        /**
-         * makes a trade exchange, the this group has initially more food.
-         * @param other
-         * @param trade
-         */
-        void trade(Group& other, int trade) {
-            if (food < trade) {
-                trade = food;
-            }
-            if (other.tools < trade) {
-                trade = other.tools;
-            }
-            food -= trade;
-            tools += trade;
-            other.food += trade;
-            other.tools -= trade;
         }
     public:
         /**

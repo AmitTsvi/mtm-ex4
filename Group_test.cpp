@@ -4,14 +4,10 @@
 
 using namespace mtm;
 
-bool exampleGroup(){
+std::ostringstream os;
 
-    std::ostringstream os;
-    //--------------------------------------------------------------------------
-    /**
-     * Group contructor tests
-     */
-    //--------------------------------------------------------------------------
+bool testCtors(){
+
     //Group constructor invalid arguments
     ASSERT_EXCEPTION(Group("Gryffindor", "Hogwarts", 0, 0, 10, 10 ,10),
                      GroupInvalidArgs);
@@ -46,11 +42,12 @@ bool exampleGroup(){
             "Group's food: 8\n"
             "Group's morale: 70\n"));
 
-    //--------------------------------------------------------------------------
-    /**
-     * Change clan tests
-     */
-    //--------------------------------------------------------------------------
+    return true;
+}
+
+bool testChangeClan(){
+    Group gryffindor("Gryffindor", 1, 2);
+
     //Change clan - to no empty clan - nothing should change
     gryffindor.changeClan("");
     os << gryffindor;
@@ -108,68 +105,34 @@ bool exampleGroup(){
             "Group's food: 10\n"
             "Group's morale: 100\n"));
 
-    //--------------------------------------------------------------------------
-    /**
-     * Operator tests (==, !=, >, <, =>, <=)
-     */
-    //--------------------------------------------------------------------------
-    Group alpha("Alpha", "Beta", 10, 10, 40, 50, 80);
-    Group gamma("Gamma", "Lambda" ,5 , 5, 20, 10 , 90);
+    return true;
+}
 
-    ASSERT_FALSE(alpha < gamma);
-    ASSERT_FALSE(alpha <= gamma);
-    ASSERT_TRUE(alpha >= gamma);
-    ASSERT_TRUE(alpha != gamma);
-    ASSERT_TRUE(alpha > gamma);
-    ASSERT_FALSE(alpha == gamma);
+bool testOperators(){
+    Group teachers("teachers", "Hogwarts", 10, 10, 40, 50, 80);
+    Group wizards("wizards", "Quidditch" ,5 , 5, 20, 10 , 90);
 
-    Group alpha1("Alpha", "Beta", 10, 10, 40, 50, 80);
+    ASSERT_FALSE(teachers< wizards);
+    ASSERT_FALSE(teachers<= wizards);
+    ASSERT_TRUE(teachers>= wizards);
+    ASSERT_TRUE(teachers!= wizards);
+    ASSERT_TRUE(teachers> wizards);
+    ASSERT_FALSE(teachers== wizards);
+
+    Group teachers1("teachers", "Hogwarts", 10, 10, 40, 50, 80);
 
     //Same power and same name - should be equal
-    ASSERT_TRUE(alpha1 == alpha);
+    ASSERT_TRUE(teachers1 == teachers);
 
-    Group blpha("Blpha", "Beta", 10, 10, 40, 50, 80);
+    Group umbridge("umbridge", "Hogwarts", 10, 10, 40, 50, 80);
 
     //Same power different name
-    ASSERT_TRUE(blpha > alpha);
+    ASSERT_TRUE(umbridge > teachers);
 
-    //--------------------------------------------------------------------------
-    ASSERT_NO_EXCEPTION(alpha.changeClan("Lambda")); //alpha morale changed to 72
-    //--------------------------------------------------------------------------
-    /**
-     * Trade tests
-     */
-    //--------------------------------------------------------------------------
-    ASSERT_TRUE(alpha.trade(gamma));
+    return true;
+}
 
-    os << alpha << gamma;
-    ASSERT_TRUE(VerifyOutput(os, "Group's name: Alpha\n"
-        "Group's clan: Lambda\n"
-        "Group's children: 10\n"
-        "Group's adults: 10\n"
-        "Group's tools: 45\n"
-        "Group's food: 45\n"
-        "Group's morale: 72\n"
-        "Group's name: Gamma\n"
-        "Group's clan: Lambda\n"
-        "Group's children: 5\n"
-        "Group's adults: 5\n"
-        "Group's tools: 15\n"
-        "Group's food: 15\n"
-        "Group's morale: 90\n"));
-
-    //gryffindor has the same number of tools and food
-    ASSERT_FALSE(gryffindor.trade(slytherin));
-    ASSERT_FALSE(slytherin.trade(gryffindor));
-
-    //cant trade with itself
-    ASSERT_EXCEPTION(gryffindor.trade(gryffindor), GroupCantTradeWithItself);
-
-    //--------------------------------------------------------------------------
-    /**
-     * Unite tests
-     */
-    //--------------------------------------------------------------------------
+bool testUnite(){
     Group hufflepuff("Hufflepuff", "", 10, 10, 2, 4, 70);
     Group ravenclaw("Ravenclaw", "", 10, 10, 2, 4, 90);
 
@@ -209,31 +172,37 @@ bool exampleGroup(){
             "Group's food: 0\n"
             "Group's morale: 0\n"));
 
-    ASSERT_TRUE(alpha.unite(gamma, 40));
-    os << alpha << gamma;
-    ASSERT_TRUE(VerifyOutput(os, "Group's name: Alpha\n"
-        "Group's clan: Lambda\n"
-        "Group's children: 15\n"
-        "Group's adults: 15\n"
-        "Group's tools: 60\n"
-        "Group's food: 60\n"
-        "Group's morale: 78\n"
-        "Group's name: \n"
-        "Group's clan: \n"
-        "Group's children: 0\n"
-        "Group's adults: 0\n"
-        "Group's tools: 0\n"
-        "Group's food: 0\n"
-        "Group's morale: 0\n"));
+    Group teachers("teachers", "Hogwarts", 10, 10, 40, 50, 80);
+    Group wizards("wizards", "Quidditch" ,5 , 5, 20, 10 , 90);
 
-    //--------------------------------------------------------------------------
-    /**
-     * Divide tests
-     */
-    //--------------------------------------------------------------------------
+    ASSERT_NO_EXCEPTION(teachers.changeClan("Quidditch")); //teachersmorale changed to 72
+
+    ASSERT_TRUE(teachers.unite(wizards, 40));
+    os << teachers<< wizards;
+    ASSERT_TRUE(VerifyOutput(os, "Group's name: teachers\n"
+            "Group's clan: Quidditch\n"
+            "Group's children: 15\n"
+            "Group's adults: 15\n"
+            "Group's tools: 60\n"
+            "Group's food: 60\n"
+            "Group's morale: 78\n"
+            "Group's name: \n"
+            "Group's clan: \n"
+            "Group's children: 0\n"
+            "Group's adults: 0\n"
+            "Group's tools: 0\n"
+            "Group's food: 0\n"
+            "Group's morale: 0\n"));
+
+
+    return true;
+}
+
+bool testDivide(){
+    Group slytherin("Slytherin", "", 10, 10 , 10, 10, 100);
+    slytherin.changeClan("Hogwarts");
 
     Group moggles = slytherin.divide("Moggles");
-
     os << moggles << slytherin;
     ASSERT_TRUE(VerifyOutput(os, "Group's name: Moggles\n"
             "Group's clan: Hogwarts\n"
@@ -249,30 +218,40 @@ bool exampleGroup(){
             "Group's tools: 5\n"
             "Group's food: 5\n"
             "Group's morale: 100\n"));
-    //--------------------------------------------------------------------------
-    Group alpha2 = alpha.divide("Alpha 2");
-    //--------------------------------------------------------------------------
-    /**
-     * Fight tests
-     */
-    //--------------------------------------------------------------------------
-    ASSERT_TRUE(alpha.fight(alpha2) == WON);
-    
-    os << alpha << alpha2;
-    ASSERT_TRUE(VerifyOutput(os, "Group's name: Alpha\n"
-        "Group's clan: Lambda\n"
-        "Group's children: 8\n"
-        "Group's adults: 6\n"
-        "Group's tools: 23\n"
-        "Group's food: 37\n"
-        "Group's morale: 94\n"
-        "Group's name: Alpha 2\n"
-        "Group's clan: Lambda\n"
-        "Group's children: 4\n"
-        "Group's adults: 4\n"
-        "Group's tools: 15\n"
-        "Group's food: 15\n"
-        "Group's morale: 62\n"));
+
+    return true;
+}
+
+bool testFight(){
+    Group gryffindor("Gryffindor", 1, 2);
+    ASSERT_NO_EXCEPTION(gryffindor.changeClan("Hogwarts"));
+    ASSERT_NO_EXCEPTION( gryffindor.changeClan("Koldovstoretz"));
+    Group slytherin("Slytherin", "Hogwarts", 10, 10 , 10, 10, 100);
+    Group moggles = slytherin.divide("Moggles");
+    Group teachers("teachers", "Hogwarts", 10, 10, 40, 50, 80);
+    Group wizards("wizards", "Quidditch" ,5 , 5, 20, 10 , 90);
+    ASSERT_NO_EXCEPTION(teachers.changeClan("Quidditch"));
+    ASSERT_NO_EXCEPTION(teachers.unite(wizards, 40));
+    Group teachers2 = teachers.divide("teachers2");
+    ASSERT_NO_EXCEPTION(teachers.trade(wizards));
+
+    ASSERT_TRUE(teachers.fight(teachers2) == WON);
+
+    os << teachers<< teachers2;
+    ASSERT_TRUE(VerifyOutput(os, "Group's name: teachers\n"
+            "Group's clan: Quidditch\n"
+            "Group's children: 8\n"
+            "Group's adults: 6\n"
+            "Group's tools: 23\n"
+            "Group's food: 37\n"
+            "Group's morale: 94\n"
+            "Group's name: teachers2\n"
+            "Group's clan: Quidditch\n"
+            "Group's children: 4\n"
+            "Group's adults: 4\n"
+            "Group's tools: 15\n"
+            "Group's food: 15\n"
+            "Group's morale: 62\n"));
 
     ASSERT_TRUE(gryffindor.fight(slytherin) == LOST);
 
@@ -296,13 +275,56 @@ bool exampleGroup(){
     ASSERT_EXCEPTION(gryffindor.fight(gryffindor), GroupCantFightWithItself);
 
     //Group cant fight with an empty group
-    ASSERT_EXCEPTION(alpha.fight(gamma), GroupCantFightEmptyGroup);
+    ASSERT_EXCEPTION(teachers.fight(wizards), GroupCantFightEmptyGroup);
 
-    //--------------------------------------------------------------------------
+    return true;
+}
+
+bool testTrade(){
+    Group gryffindor("Gryffindor", 1, 2);
+    Group slytherin("Slytherin", "Hogwarts", 10, 10 , 10, 10, 100);
+    Group moggles = slytherin.divide("Moggles");
+    Group teachers("teachers", "Hogwarts", 10, 10, 40, 50, 80);
+    Group wizards("wizards", "Quidditch" ,5 , 5, 20, 10 , 90);
+
+    ASSERT_NO_EXCEPTION(gryffindor.changeClan("Hogwarts"));
+    ASSERT_NO_EXCEPTION(gryffindor.changeClan("Koldovstoretz"));
+    ASSERT_NO_EXCEPTION(teachers.changeClan("Quidditch"));
+    ASSERT_TRUE(teachers.trade(wizards));
+
+    os << teachers<< wizards;
+    ASSERT_TRUE(VerifyOutput(os, "Group's name: teachers\n"
+            "Group's clan: Quidditch\n"
+            "Group's children: 10\n"
+            "Group's adults: 10\n"
+            "Group's tools: 45\n"
+            "Group's food: 45\n"
+            "Group's morale: 72\n"
+            "Group's name: wizards\n"
+            "Group's clan: Quidditch\n"
+            "Group's children: 5\n"
+            "Group's adults: 5\n"
+            "Group's tools: 15\n"
+            "Group's food: 15\n"
+            "Group's morale: 90\n"));
+
+    //gryffindor has the same number of tools and food
+    ASSERT_FALSE(gryffindor.trade(slytherin));
+    ASSERT_FALSE(slytherin.trade(gryffindor));
+
+    //cant trade with itself
+    ASSERT_EXCEPTION(gryffindor.trade(gryffindor), GroupCantTradeWithItself);
+
     return true;
 }
 
 int main(){
-    RUN_TEST(exampleGroup);
+    RUN_TEST(testCtors);
+    RUN_TEST(testChangeClan);
+    RUN_TEST(testOperators);
+    RUN_TEST(testUnite);
+    RUN_TEST(testDivide);
+    RUN_TEST(testFight);
+    RUN_TEST(testTrade);
     return 0;
 }
