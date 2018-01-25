@@ -29,7 +29,7 @@ namespace mtm{
         /*
          * Empty Constructor
          */
-        Area();
+        Area() = default;
 
     public:
         /**

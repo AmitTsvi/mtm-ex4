@@ -5,8 +5,6 @@
 
 using std::vector;
 
-mtm::Area::Area() = default;
-
 mtm::Area::Area(const std::string& name)
 {
     if (name.empty()){

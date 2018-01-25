@@ -5,37 +5,61 @@
 #include "Plain.h"
 #include "Mountain.h"
 #include "River.h"
-#include "World.h"
 #include "exceptions.h"
 
 using namespace mtm;
 
-typedef Area* AreaPtr;
+typedef std::shared_ptr<Area> AreaPtr;
 
 std::map<std::string, Clan> makeClanMap(){
     std::map<std::string, Clan> clan_map;
-    clan_map.insert(std::pair<std::string, Clan>("Beta", Clan("Beta")));
-    clan_map.insert(std::pair<std::string, Clan>("Gamma", Clan("Gamma")));
-    clan_map.at("Beta").addGroup(Group("Alpha1", 10, 10));
-    clan_map.at("Beta").addGroup(Group("Alpha2","", 10, 10, 40, 0, 70));
-    clan_map.at("Gamma").addGroup(Group("Lambda1", 10, 10));
-    clan_map.at("Gamma").addGroup(Group("Lambda2", 5, 5));
-    clan_map.at("Gamma").addGroup(Group("Lambda3", 100, 100));
+    clan_map.insert(std::pair<std::string, Clan>("1", Clan("1")));
+    clan_map.insert(std::pair<std::string, Clan>("2", Clan("2")));
+    clan_map.insert(std::pair<std::string, Clan>("1.e", Clan("1.e")));
+    clan_map.at("1").addGroup(Group("1.1", "1", 24, 0, 1, 1, 1));
+    clan_map.at("1").addGroup(Group("1.1_2", "1", 1, 0, 1, 1, 1));
+    clan_map.at("1").addGroup(Group("1.2", "1", 16, 0, 1, 1, 1));
+    clan_map.at("1").addGroup(Group("1.3", "1", 19, 0, 1, 1, 1));
+    clan_map.at("1").addGroup(Group("1.4", "1", 4, 0, 1, 1, 1));
+    clan_map.at("2").addGroup(Group("2.1", "2", 20, 0, 1, 1, 1));
+    clan_map.at("2").addGroup(Group("2.2", "2", 10, 0, 1, 1, 1));
+    clan_map.at("2").addGroup(Group("2.3", "2", 200, 0, 1, 1, 1));
+    clan_map.at("1.e").addGroup(Group("1.1", 10, 10));
     return clan_map;
 }
 
-bool examplePlain(){
-    AreaPtr tel_aviv(new Plain("Tel-Aviv"));
+//PLAIN TESTS
+bool plainCtorDtorTest(){
+    ASSERT_NO_EXCEPTION(Plain plain1("One"));
+    ASSERT_EXCEPTION(Plain error_plain(""), AreaInvalidArguments);
+    return true;
+}
+
+bool plainReachableTest(){
+    Plain plain1("One");
+    ASSERT_TRUE(plain1.isReachable("One"));
+    ASSERT_NO_EXCEPTION(plain1.addReachableArea("Two"));
+    ASSERT_TRUE(plain1.isReachable("Two"));
+    ASSERT_FALSE(plain1.isReachable("Three"));
+    return true;
+}
+
+bool plainGroupAriveTest(){
+    Plain plain1("1");
     std::map<std::string, Clan> clan_map = makeClanMap();
-    ASSERT_NO_EXCEPTION(tel_aviv->groupArrive("Alpha1", "Beta", clan_map));
-    // divide
-    //ASSERT_TRUE(tel_aviv->getGroupsNames().contains("Alpha1_2"));
-    ASSERT_NO_EXCEPTION(tel_aviv->groupArrive("Lambda1", "Gamma", clan_map));
-    ASSERT_NO_EXCEPTION(tel_aviv->groupArrive("Lambda2", "Gamma", clan_map));
-    //unite with lambda1
-
-    //ASSERT_FALSE(tel_aviv->getGroupsNames().contains("Lambda2"));
-
+    ASSERT_EXCEPTION(plain1.groupArrive("1.1", "TT", clan_map), AreaClanNotFoundInMap);
+    ASSERT_EXCEPTION(plain1.groupArrive("2.1", "1", clan_map), AreaGroupNotInClan);
+    //1.1(20) added and divided to 1.1(12) and 1.1_3(12)
+    ASSERT_NO_EXCEPTION(plain1.groupArrive("1.1", "1", clan_map));
+    ASSERT_EXCEPTION(plain1.groupArrive("1.1", "1.e", clan_map) ,AreaGroupAlreadyIn);
+    //1.2(16) added and no group to unite with
+    ASSERT_NO_EXCEPTION(plain1.groupArrive("1.2", "1", clan_map));
+    //1.4(4) added and united with 1.2(20)
+    ASSERT_NO_EXCEPTION(plain1.groupArrive("1.4", "1", clan_map));
+    ASSERT_TRUE(plain1.getGroupsNames().size() == 3);
+    ASSERT_TRUE(plain1.getGroupsNames().contains("1.1"));
+    ASSERT_TRUE(plain1.getGroupsNames().contains("1.1_3"));
+    ASSERT_TRUE(plain1.getGroupsNames().contains("1.2"));
     return true;
 }
 
@@ -74,7 +98,9 @@ bool exampleRiver(){
 }
 
 int main(){
-    RUN_TEST(examplePlain);
+    RUN_TEST(plainCtorDtorTest);
+    RUN_TEST(plainReachableTest);
+    RUN_TEST(plainGroupAriveTest);
     RUN_TEST(exampleMountain);
     RUN_TEST(exampleRiver);
     return 0;
