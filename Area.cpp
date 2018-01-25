@@ -3,6 +3,9 @@
 #include <stdexcept>
 #include <algorithm>
 
+
+mtm::Area::Area() = default;
+
 explicit mtm::Area::Area(const std::string& name)
 {
     if (string.empty()){

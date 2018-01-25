@@ -20,12 +20,12 @@ namespace mtm{
      * Groups that become empty, should be removed from the area.
      */
     class Area{
-        string area_name;
-        MtmSet<string> other_areas;
-        
-    protected:
 
+    protected:
+        string area_name;
         std::vector<GroupPointer> groups;
+        MtmSet<string> other_areas;
+        Area();
 
     public:
         /**
