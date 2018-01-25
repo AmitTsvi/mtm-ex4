@@ -16,13 +16,16 @@ void mtm::Mountain::groupArrive(const string& group_name, const string& clan,
             throw AreaGroupAlreadyIn();
         }
         if (!ruler){
-            groups.push_back(group);
             ruler = group;
 
         } else if (ruler->getClan() == clan){
-            if ()
+            if (group > ruler){
+                ruler = group;
+            }
         } else {
-
+            if (group->fight(*ruler) == WON){
+                ruler = group;
+            }
         }
         groups.push_back(group);
         return;
@@ -33,4 +36,28 @@ void mtm::Mountain::groupArrive(const string& group_name, const string& clan,
     }
 }
 
-virtual void groupLeave(const std::string& group_name)
+virtual void mtm::Mountain::groupLeave(const std::string& group_name)
+{
+    std::vector::const_iterator it = find(groups.begin(), groups.end(),
+                                          group_name);
+    if (it == groups.end()){
+        throw AreaGroupNotFound();
+    }
+    string group_clan = (*it)->getClan();
+    std::sort(groups.begin(), groups.end());
+    if (ruler->getName() == group_name){
+        if (groups.size() == 1){
+            ruler.reset();
+        } else {
+            for (int i = groups.size()-1; i >= 0; i++){
+                if (groups[i]->getClan() == group_clan){
+                    ruler = groups[i];
+                    groups.erase(it);
+                    return;
+                }
+            }
+            ruler = groups[0];
+        }
+    }
+    groups.erase(it);
+}

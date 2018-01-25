@@ -32,7 +32,7 @@ void mtm::Plain::groupArrive(const string& group_name, const string& clan,
     try {
         mtm::Clan& arrived_clan = clan_map.at(clan);
         const mtm::GroupPointer& group = arrived_clan.getGroup(group_name);
-        if (find(groups.begin(), groups.end(), group) == groups.end()){
+        if (find(groups.begin(), groups.end(), group) != groups.end()){
             throw AreaGroupAlreadyIn();
         }
         if (3*group->getSize() <= arrived_clan.getSize()){

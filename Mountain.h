@@ -32,7 +32,12 @@ namespace mtm{
         ~Mountain() override;
 
         /**
-        * Get a group into the Mountain.
+        * Get a group into the Mountain:
+         * if there is no group on the mountain then it is the new ruler.
+         * if the current ruler is from the same clan then if the new group
+         * is stronger it becomes the new ruler.
+         * if the current ruler is from another clan then the two groups fight
+         * and the winner is the new ruler
         *
         * @param group_name The name of the group that get into the Mountain.
         * @param clan The name of the clan that the group belongs to.
@@ -50,12 +55,16 @@ namespace mtm{
                          map<string, Clan>& clan_map) override;
 
         /**
-        * Get a group out of the area.
+        * Get a group out of the area:
+         * if the group is the ruler then the strongest group from it's clan
+         * becomes the new ruler.
+         * if there is no other group from the same clan then the strongest
+         * group on the mountain becomes the new ruler.
         * @param group_name The name of the leaving group.
         * @throws AreaGroupNotFound If there is no group in the area with the
         *  same name;
         */
-        virtual void groupLeave(const std::string& group_name) override;
+        void groupLeave(const std::string& group_name) override;
 
     };
 
