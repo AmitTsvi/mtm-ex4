@@ -31,7 +31,8 @@ namespace mtm{
 
         /**
         * Get a group into the river:
-        *
+         * before entering the river the group trades with the strongest group
+         * which is from it's clan or a friend clan of it.
         * @param group_name The name of the group that get into the river.
         * @param clan The name of the clan that the group belongs to.
         * @param clan_map The map of clans that contains the clan of the group

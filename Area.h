@@ -25,6 +25,10 @@ namespace mtm{
         string area_name;
         std::vector<GroupPointer> groups;
         MtmSet<string> other_areas;
+
+        /*
+         * Empty Constructor
+         */
         Area();
 
     public:

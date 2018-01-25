@@ -3,18 +3,19 @@
 #include <stdexcept>
 #include <algorithm>
 
+using std::vector;
 
 mtm::Area::Area() = default;
 
-explicit mtm::Area::Area(const std::string& name)
+mtm::Area::Area(const std::string& name)
 {
-    if (string.empty()){
+    if (name.empty()){
         throw AreaInvalidArguments();
     }
     area_name = name;
 }
 
-virtual mtm:: Area::~Area() = default;
+mtm:: Area::~Area() = default;
 
 void mtm::Area::addReachableArea(const std::string& area_name)
 {
@@ -27,7 +28,7 @@ bool mtm::Area::isReachable(const std::string& area_name) const
     return other_areas.contains(area_name);
 }
 
-virtual void mtm::Area::groupArrive(const string& group_name,
+void mtm::Area::groupArrive(const string& group_name,
                                     const string& clan,
                                     map<string, Clan>& clan_map)
 {
@@ -45,21 +46,23 @@ virtual void mtm::Area::groupArrive(const string& group_name,
     }
 }
 
-virtual void mtm::Area::groupLeave(const std::string& group_name)
+void mtm::Area::groupLeave(const std::string& group_name)
 {
-    std::vector::const_iterator it = find(groups.begin(), groups.end(),
-                                          group_name);
+    auto it = groups.begin();
+    for (; it != groups.end(); it++){
+        if ((*it)->getName() == group_name) break;
+    }
     if (it == groups.end()){
         throw AreaGroupNotFound();
     }
     groups.erase(it);
 }
 
-MtmSet<std::string> mtm::Area::getGroupsNames() const
+mtm::MtmSet<std::string> mtm::Area::getGroupsNames() const
 {
-    MtmSet<std::string> set;
-    for (int i=0; i<groups.size(); i++){
-        set.insert((*(groups[i])).getName());
+    mtm::MtmSet<std::string> set;
+    for (vector<GroupPointer>::size_type i=0; i < groups.size(); i++){
+        set.insert((groups[i])->getName());
     }
     return set;
 }

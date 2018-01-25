@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-explicit mtm::Mountain::Mountain(const std::string& name):Area(name){};
+mtm::Mountain::Mountain(const std::string& name):Area(name){}
 
 mtm::Mountain::~Mountain() = default;
 
@@ -12,7 +12,7 @@ void mtm::Mountain::groupArrive(const string& group_name, const string& clan,
     try {
         mtm::Clan& arrived_clan = clan_map.at(clan);
         const mtm::GroupPointer& group = arrived_clan.getGroup(group_name);
-        if (find(groups.begin(), groups.end(), group) == groups.end()){
+        if (find(groups.begin(), groups.end(), group) != groups.end()){
             throw AreaGroupAlreadyIn();
         }
         if (!ruler){
@@ -36,10 +36,12 @@ void mtm::Mountain::groupArrive(const string& group_name, const string& clan,
     }
 }
 
-virtual void mtm::Mountain::groupLeave(const std::string& group_name)
+void mtm::Mountain::groupLeave(const std::string& group_name)
 {
-    std::vector::const_iterator it = find(groups.begin(), groups.end(),
-                                          group_name);
+    auto it = groups.begin();
+    for (; it != groups.end(); it++){
+        if (((*it)->getName()) == group_name) break;
+    }
     if (it == groups.end()){
         throw AreaGroupNotFound();
     }
@@ -49,7 +51,7 @@ virtual void mtm::Mountain::groupLeave(const std::string& group_name)
         if (groups.size() == 1){
             ruler.reset();
         } else {
-            for (int i = groups.size()-1; i >= 0; i++){
+            for (int i = groups.size()-1; i >= 0; i--){
                 if (groups[i]->getClan() == group_clan){
                     ruler = groups[i];
                     groups.erase(it);
