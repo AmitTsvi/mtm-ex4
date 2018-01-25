@@ -47,10 +47,10 @@ namespace mtm{
          * True - if there is a group with the same name in the clans
          */
         friend bool isSameGroupsInTwoClans(const Clan& clan, const Clan& other){
-            for (MtmSet<GroupPointer>::iterator outer_it =
+            for (MtmSet<GroupPointer>::const_iterator outer_it =
                     (clan.clan_groups).begin();
                  outer_it != (clan.clan_groups).end(); ++outer_it) {
-                for (MtmSet<GroupPointer>::iterator inner_it =
+                for (MtmSet<GroupPointer>::const_iterator inner_it =
                         (other.clan_groups).begin();
                      inner_it != (other.clan_groups).end(); ++inner_it) {
                         if ((*outer_it)->getName() == (*inner_it)->getName()) {
@@ -166,6 +166,7 @@ namespace mtm{
          * operators, from strongest to weakest. In the next Format:
          *
          * Clan's name: [name]
+         * Clan's groups:
          *     [1'st group name]
          *     [2'nd group name]
          *     [3'rd group name]

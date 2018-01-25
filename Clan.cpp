@@ -23,7 +23,8 @@ namespace mtm{
         if (doesContain(group.getName())) {
             throw ClanGroupNameAlreadyTaken();
         }
-        GroupPointer group_copy = new Group(group); //to test
+        //Change morale in group
+        GroupPointer group_copy(new Group(group)); //to test
         (*group_copy).changeClan(clan_name);
         clan_groups.insert(group_copy);
     }
@@ -110,14 +111,14 @@ namespace mtm{
       return (clan_friends.contains(other.clan_name));
     }
 
-    bool compareToPrint(const Group& lgroup, const Group& rgroup){
-        return (lgroup > rgroup);
+    bool compareToPrint(const GroupPointer& lgroup, const GroupPointer& rgroup){
+        return ((*lgroup) > (*rgroup));
     }
 
-    friend std::ostream& Clan::operator<<(std::ostream& os, const Clan& clan){
-        using std::endl
-        using std::ostream
-        using std::vector
+    std::ostream& operator<<(std::ostream& os, const Clan& clan){
+        using std::endl;
+        using std::ostream;
+        using std::vector;
         vector<GroupPointer> group_vector;
         for (MtmSet<GroupPointer>::const_iterator it =
                 (clan.clan_groups).begin();
@@ -126,9 +127,9 @@ namespace mtm{
         }
         //sort from weakest to strongest
         std::sort(group_vector.begin(), group_vector.end(), compareToPrint);
-
         //Print details
-        os << clan.clan_name << endl;
+        os << "Clan's name: " << clan.clan_name << endl;
+        os << "Clan's groups: " << endl;
         for (vector<GroupPointer>::iterator it = group_vector.begin();
                 it != group_vector.end(); ++it) {
             os << (*it)->getName() << endl;

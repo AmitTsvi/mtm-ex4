@@ -22,7 +22,7 @@ add_executable(Group_tests Group.h Group.cpp exceptions.h testMacros.h Group_tes
 set(SOURCE_FILES
         Group.h Group.cpp exceptions.h testMacros.h Group_test.cpp)
 
-#add_executable(Clan.h Clan.cpp MtmSet.h Group.h Group.cpp)
+add_executable(Clan_tests Clan.h Clan.cpp MtmSet.h Group.h Group.cpp tmpClanTests.cpp)
 
-#set(SOURCE_FILES
-#        Clan.h Clan.cpp MtmSet.h Group.h Group.cpp)
+set(SOURCE_FILES
+        Clan.h Clan.cpp MtmSet.h Group.h Group.cpp tmpClanTests.cpp)
