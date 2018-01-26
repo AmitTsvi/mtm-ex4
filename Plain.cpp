@@ -1,6 +1,7 @@
 #include "Plain.h"
 #include <stdexcept>
 #include <algorithm>
+#include <iostream>
 
 string mtm::Plain::getFirstValidName(const string& base_name, map<string,
         Clan>& clan_map) const
@@ -42,9 +43,8 @@ void mtm::Plain::groupArrive(const string& group_name, const string& clan,
             }
         } else if (group->getSize() >= 10){
             string new_name = getFirstValidName(group_name, clan_map);
-            Group new_group = group->divide(new_name);
-            GroupPointer new_group_ptr(&new_group);
-            arrived_clan.addGroup(new_group);
+            GroupPointer new_group_ptr(new Group(group->divide(new_name)));
+            arrived_clan.addGroup(*new_group_ptr);
             groups.push_back(group);
             groups.push_back(new_group_ptr);
             return;

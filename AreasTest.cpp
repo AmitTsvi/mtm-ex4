@@ -15,16 +15,14 @@ std::map<std::string, Clan> makeClanMap(){
     std::map<std::string, Clan> clan_map;
     clan_map.insert(std::pair<std::string, Clan>("1", Clan("1")));
     clan_map.insert(std::pair<std::string, Clan>("2", Clan("2")));
-    clan_map.insert(std::pair<std::string, Clan>("1.e", Clan("1.e")));
-    clan_map.at("1").addGroup(Group("1.1", "1", 24, 0, 1, 1, 1));
-    clan_map.at("1").addGroup(Group("1.1_2", "1", 1, 0, 1, 1, 1));
-    clan_map.at("1").addGroup(Group("1.2", "1", 16, 0, 1, 1, 1));
-    clan_map.at("1").addGroup(Group("1.3", "1", 19, 0, 1, 1, 1));
-    clan_map.at("1").addGroup(Group("1.4", "1", 4, 0, 1, 1, 1));
-    clan_map.at("2").addGroup(Group("2.1", "2", 20, 0, 1, 1, 1));
-    clan_map.at("2").addGroup(Group("2.2", "2", 10, 0, 1, 1, 1));
-    clan_map.at("2").addGroup(Group("2.3", "2", 200, 0, 1, 1, 1));
-    clan_map.at("1.e").addGroup(Group("1.1", 10, 10));
+    clan_map.at("1").addGroup(Group("1.1", "1", 24, 0, 2, 2, 80));
+    clan_map.at("1").addGroup(Group("1.1_2", "1", 1, 0, 2, 2, 80));
+    clan_map.at("1").addGroup(Group("1.2", "1", 16, 0, 2, 2, 80));
+    clan_map.at("1").addGroup(Group("1.3", "1", 19, 0, 2, 2, 80));
+    clan_map.at("1").addGroup(Group("1.4", "1", 4, 0, 2, 2, 80));
+    clan_map.at("2").addGroup(Group("2.1", "2", 20, 0, 2, 2, 80));
+    clan_map.at("2").addGroup(Group("2.2", "2", 10, 0, 2, 2, 80));
+    clan_map.at("2").addGroup(Group("2.3", "2", 200, 0, 2, 2, 80));
     return clan_map;
 }
 
@@ -49,9 +47,10 @@ bool plainGroupAriveTest(){
     std::map<std::string, Clan> clan_map = makeClanMap();
     ASSERT_EXCEPTION(plain1.groupArrive("1.1", "TT", clan_map), AreaClanNotFoundInMap);
     ASSERT_EXCEPTION(plain1.groupArrive("2.1", "1", clan_map), AreaGroupNotInClan);
-    //1.1(20) added and divided to 1.1(12) and 1.1_3(12)
+    //1.1(24) added and divided to 1.1(12) and 1.1_3(12)
     ASSERT_NO_EXCEPTION(plain1.groupArrive("1.1", "1", clan_map));
-    ASSERT_EXCEPTION(plain1.groupArrive("1.1", "1.e", clan_map) ,AreaGroupAlreadyIn);
+    ASSERT_TRUE(plain1.getGroupsNames().size() == 2);
+    ASSERT_EXCEPTION(plain1.groupArrive("1.1", "1", clan_map) ,AreaGroupAlreadyIn);
     //1.2(16) added and no group to unite with
     ASSERT_NO_EXCEPTION(plain1.groupArrive("1.2", "1", clan_map));
     //1.4(4) added and united with 1.2(20)
