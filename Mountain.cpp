@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <algorithm>
 
+using std::vector;
+
 mtm::Mountain::Mountain(const std::string& name):Area(name){}
 
 mtm::Mountain::~Mountain() = default;
@@ -19,7 +21,7 @@ void mtm::Mountain::groupArrive(const string& group_name, const string& clan,
             ruler = group;
 
         } else if (ruler->getClan() == clan){
-            if (group > ruler){
+            if (*group > *ruler){
                 ruler = group;
             }
         } else {
@@ -46,15 +48,15 @@ void mtm::Mountain::groupLeave(const std::string& group_name)
         throw AreaGroupNotFound();
     }
     string group_clan = (*it)->getClan();
-    std::sort(groups.begin(), groups.end());
     if (ruler->getName() == group_name){
         if (groups.size() == 1){
             ruler.reset();
         } else {
-            for (int i = groups.size()-1; i >= 0; i--){
+            groups.erase(it);
+            this->sortStrongerToWeaker();
+            for (vector<GroupPointer>::size_type i = 0; i < groups.size(); i++){
                 if (groups[i]->getClan() == group_clan){
                     ruler = groups[i];
-                    groups.erase(it);
                     return;
                 }
             }

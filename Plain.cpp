@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <iostream>
 
+using std::vector;
+
 string mtm::Plain::getFirstValidName(const string& base_name, map<string,
         Clan>& clan_map) const
 {
@@ -37,8 +39,8 @@ void mtm::Plain::groupArrive(const string& group_name, const string& clan,
             throw AreaGroupAlreadyIn();
         }
         if (3*group->getSize() <= arrived_clan.getSize()){
-            std::sort(groups.begin(), groups.end());
-            for (int i = groups.size()-1; i >= 0; i--){
+            this->sortStrongerToWeaker();
+            for (vector<GroupPointer>::size_type i = 0; i < groups.size(); i++){
                 if (groups[i]->unite(*group, arrived_clan.getSize()/3)) return;
             }
         } else if (group->getSize() >= 10){

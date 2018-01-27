@@ -3,9 +3,20 @@
 #include <stdexcept>
 #include <algorithm>
 
+using namespace mtm;
 using std::vector;
 
-mtm::Area::Area(const std::string& name)
+bool compByPower(const GroupPointer& first, const GroupPointer& second)
+{
+    return ((*first) > (*second));
+}
+
+void Area::sortStrongerToWeaker()
+{
+    std::sort(groups.begin(), groups.end(), compByPower);
+}
+
+Area::Area(const std::string& name)
 {
     if (name.empty()){
         throw AreaInvalidArguments();
@@ -13,26 +24,26 @@ mtm::Area::Area(const std::string& name)
     area_name = name;
 }
 
-mtm:: Area::~Area() = default;
+Area::~Area() = default;
 
-void mtm::Area::addReachableArea(const std::string& area_name)
+void Area::addReachableArea(const std::string& area_name)
 {
     other_areas.insert(area_name);
 }
 
-bool mtm::Area::isReachable(const std::string& area_name) const
+bool Area::isReachable(const std::string& area_name) const
 {
     if (this->area_name == area_name) return true;
     return other_areas.contains(area_name);
 }
 
-void mtm::Area::groupArrive(const string& group_name,
+void Area::groupArrive(const string& group_name,
                                     const string& clan,
                                     map<string, Clan>& clan_map)
 {
     try {
-        const mtm::Clan& arrived_clan = clan_map.at(clan);
-        const mtm::GroupPointer& group = arrived_clan.getGroup(group_name);
+        const Clan& arrived_clan = clan_map.at(clan);
+        const GroupPointer& group = arrived_clan.getGroup(group_name);
         if (find(groups.begin(), groups.end(), group) != groups.end()){
             throw AreaGroupAlreadyIn();
         }
@@ -44,7 +55,7 @@ void mtm::Area::groupArrive(const string& group_name,
     }
 }
 
-void mtm::Area::groupLeave(const std::string& group_name)
+void Area::groupLeave(const std::string& group_name)
 {
     auto it = groups.begin();
     for (; it != groups.end(); it++){
@@ -56,9 +67,9 @@ void mtm::Area::groupLeave(const std::string& group_name)
     groups.erase(it);
 }
 
-mtm::MtmSet<std::string> mtm::Area::getGroupsNames() const
+MtmSet<std::string> Area::getGroupsNames() const
 {
-    mtm::MtmSet<std::string> set;
+    MtmSet<std::string> set;
     for (vector<GroupPointer>::size_type i=0; i < groups.size(); i++){
         set.insert((groups[i])->getName());
     }

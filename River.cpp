@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-
+using std::vector;
 
 mtm::River::River(const std::string& name):Area(name){}
 
@@ -18,9 +18,10 @@ void mtm::River::groupArrive(const string& group_name, const string& clan,
         if (find(groups.begin(), groups.end(), group) != groups.end()){
             throw AreaGroupAlreadyIn();
         }
-        std::sort(groups.begin(), groups.end());
+        this->sortStrongerToWeaker();
         bool trade_result = false;
-        for (int i = groups.size()-1; i >= 0 && !trade_result; i--){
+        for (vector<GroupPointer>::size_type i = 0;
+             i < groups.size() && !trade_result; i++){
             mtm::Clan& tmp_clan = clan_map.at(groups[i]->getClan());
             if(groups[i]->getClan() == clan || arrived_clan.isFriend(tmp_clan)){
                 trade_result = group->trade(*groups[i]);

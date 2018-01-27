@@ -31,6 +31,8 @@ namespace mtm{
          */
         Area() = default;
 
+        void sortStrongerToWeaker();
+
     public:
         /**
          * Constructor
