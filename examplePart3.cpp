@@ -5,11 +5,10 @@
 #include "Plain.h"
 #include "Mountain.h"
 #include "River.h"
-#include "World.h"
 #include "exceptions.h"
 
 using namespace mtm;
-
+typedef std::shared_ptr<Area> AreaPtr;
 bool exampleClan(){
     Clan beta("Beta");
     ASSERT_NO_EXCEPTION(beta.addGroup(Group("Alpha1", 10, 10)));
@@ -98,32 +97,10 @@ bool exampleRiver(){
     return true;
 }
 
-bool exampleWorld(){
-    World w;
-    ASSERT_NO_EXCEPTION(w.addClan("Beta"));
-    ASSERT_NO_EXCEPTION(w.addArea("Tel-Aviv", PLAIN));
-    ASSERT_NO_EXCEPTION(w.addArea("Carmel", MOUNTAIN));
-    ASSERT_NO_EXCEPTION(w.makeReachable("Carmel", "Tel-Aviv"));
-    ASSERT_NO_EXCEPTION(w.addGroup("Alpha","Beta", 10, 10, "Carmel"));
-    ASSERT_NO_EXCEPTION(w.moveGroup("Alpha", "Tel-Aviv")); //divides
-    ostringstream os;
-    ASSERT_NO_EXCEPTION(w.printGroup(os, "Alpha"));
-    ASSERT_TRUE(VerifyOutput(os, "Group's name: Alpha\n"
-        "Group's clan: Beta\n"
-        "Group's children: 5\n"
-        "Group's adults: 5\n"
-        "Group's tools: 20\n"
-        "Group's food: 25\n"
-        "Group's morale: 77\n"
-        "Group's current area: Tel-Aviv\n"));
-    return true;
-}
-
 int main(){
     RUN_TEST(exampleClan);
     RUN_TEST(examplePlain);
     RUN_TEST(exampleMountain);
     RUN_TEST(exampleRiver);
-    RUN_TEST(exampleWorld);
     return 0;
 }

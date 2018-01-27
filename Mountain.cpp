@@ -51,6 +51,7 @@ void mtm::Mountain::groupLeave(const std::string& group_name)
     if (ruler->getName() == group_name){
         if (groups.size() == 1){
             ruler.reset();
+            groups.erase(it);
         } else {
             groups.erase(it);
             this->sortStrongerToWeaker();
@@ -62,6 +63,8 @@ void mtm::Mountain::groupLeave(const std::string& group_name)
             }
             ruler = groups[0];
         }
+    } else {
+        groups.erase(it);
     }
-    groups.erase(it);
+
 }
