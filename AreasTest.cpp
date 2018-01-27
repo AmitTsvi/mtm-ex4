@@ -9,8 +9,6 @@
 
 using namespace mtm;
 
-typedef std::shared_ptr<Area> AreaPtr;
-
 std::map<std::string, Clan> makeClanMap(){
     std::map<std::string, Clan> clan_map;
     clan_map.insert(std::pair<std::string, Clan>("1", Clan("1")));
