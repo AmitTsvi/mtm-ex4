@@ -8,6 +8,138 @@ bool isEven(int n){
     return !(n%2);
 }
 
+bool iteratorCtorDtorTest(){
+    MtmSet<int> set;
+    set.insert(2);
+    MtmSet<int>::iterator empty_it;
+    MtmSet<int>::iterator it(set.begin());
+    ASSERT_TRUE(*it == 2);
+
+    const MtmSet<int> const_set = set;
+    MtmSet<int>::const_iterator empty_cit;
+    MtmSet<int>::const_iterator cit(set.begin());
+    ASSERT_TRUE(*it == 2);
+    MtmSet<int>::const_iterator cit2(it);
+    ASSERT_TRUE(*cit == 2);
+    return true;
+}
+
+bool iteratorAssignmentOperatorTest(){
+    MtmSet<int> set;
+    set.insert(2);
+    MtmSet<int>::iterator it = set.begin();
+    ASSERT_TRUE(*it == 2);
+
+    const MtmSet<int> const_set = set;
+    MtmSet<int>::const_iterator cit = set.begin();
+    ASSERT_TRUE(*cit == 2);
+
+    return true;
+}
+
+bool iteratorDereferenceTest(){
+    MtmSet<int> set;
+    set.insert(2);
+    ASSERT_TRUE(*set.begin() == 2);
+
+    const MtmSet<int> const_set = set;
+    ASSERT_TRUE(*const_set.begin() == 2);
+
+    class Dog{
+    public:
+        int id;
+        int weight;
+
+        Dog(int a, int b): id(a), weight(b){}
+
+        bool operator==(const Dog& rhs) const{
+            return (id == rhs.id && weight == rhs.weight);
+        }
+
+        Dog(const Dog& rhs) = default;
+
+    };
+
+    MtmSet<Dog> dset;
+    Dog aaa(2,7);
+    dset.insert(aaa);
+    ASSERT_TRUE(dset.begin()->id == 2);
+
+    const MtmSet<Dog> const_dset = dset;
+    ASSERT_TRUE(const_dset.begin()->weight == 7);
+
+    return true;
+}
+
+bool iteratorOperatorPlusTest(){
+    MtmSet<int> set;
+    set.insert(2);
+    set.insert(0);
+    set.insert(4);
+    set.insert(8);
+
+    MtmSet<int>::iterator it(set.begin());
+    ASSERT_TRUE(*it == 2);
+    ASSERT_TRUE(*(it++) == 2);
+    ASSERT_TRUE(*it == 0);
+    ASSERT_TRUE(*(++it) == 4);
+
+    const MtmSet<int> const_set = set;
+    MtmSet<int>::const_iterator cit(const_set.begin());
+    ASSERT_TRUE(*cit == 2);
+    ASSERT_TRUE(*(cit++) == 2);
+    ASSERT_TRUE(*cit == 0);
+    ASSERT_TRUE(*(++cit) == 4);
+
+    return true;
+}
+
+bool iteratorCompareTest(){
+    MtmSet<int> set;
+    set.insert(2);
+    set.insert(0);
+    set.insert(4);
+    set.insert(8);
+
+    MtmSet<int> set2;
+    set2.insert(2);
+    set2.insert(0);
+    set2.insert(4);
+    set2.insert(8);
+
+    MtmSet<int>::iterator set1_it(set.begin());
+    MtmSet<int>::iterator set1_it2(set.begin());
+    MtmSet<int>::iterator set2_it(set2.begin());
+
+    set1_it++;
+    set1_it2++;
+    ASSERT_TRUE(set1_it == set1_it2);
+    ASSERT_FALSE(set1_it != set1_it2);
+    set2_it++;
+    ASSERT_FALSE(set1_it == set2_it);
+    ASSERT_TRUE(set1_it != set2_it);
+
+    const MtmSet<int> cset = set;
+    const MtmSet<int> cset2 = set2;
+
+    MtmSet<int>::iterator cset1_it(set.begin());
+    MtmSet<int>::iterator cset1_it2(set.begin());
+    MtmSet<int>::iterator cset2_it(set2.begin());
+
+    cset1_it++;
+    cset1_it2++;
+    ASSERT_TRUE(cset1_it == cset1_it2);
+    ASSERT_FALSE(cset1_it != cset1_it2);
+    cset2_it++;
+    ASSERT_FALSE(cset1_it == cset2_it);
+    ASSERT_TRUE(cset1_it != cset2_it);
+
+    return true;
+}
+
+
+
+
 bool setEmptyCtorTest(){
     MtmSet<int> set;
     ASSERT_TRUE(set.begin() == set.end());
@@ -384,5 +516,10 @@ int main(){
     RUN_TEST(setIntersectTest);
     RUN_TEST(setIntersectTestConst)
     RUN_TEST(setGetSubSetTest);
+    RUN_TEST(iteratorCtorDtorTest);
+    RUN_TEST(iteratorAssignmentOperatorTest);
+    RUN_TEST(iteratorDereferenceTest);
+    RUN_TEST(iteratorOperatorPlusTest);
+    RUN_TEST(iteratorCompareTest);
     return 0;
 }
