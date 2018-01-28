@@ -26,3 +26,47 @@ add_executable(Clan_tests Clan.h Clan.cpp MtmSet.h Group.h Group.cpp tmpClanTest
 
 set(SOURCE_FILES
         Clan.h Clan.cpp MtmSet.h Group.h Group.cpp tmpClanTests.cpp)
+
+add_executable(examplePart3 Area.h
+        Clan.h
+        Group.cpp
+        exceptions.h
+        Group.h
+        MtmSet.h
+        testMacros.h
+        World.h
+        World.cpp)
+
+set(SOURCE_FILES Area.h
+        Clan.h
+        Group.cpp
+        exceptions.h
+        Group.h
+        MtmSet.h
+        testMacros.h
+        World.h
+        World.cpp)
+
+add_executable(World_tests Area.h
+        Clan.h
+        Clan.cpp
+        Group.cpp
+        exceptions.h
+        Group.h
+        MtmSet.h
+        testMacros.h
+        World.h
+        Area.cpp
+        World.cpp Mountain.cpp Mountain.h Plain.cpp Plain.h River.cpp River.h tmpWorldTests.cpp)
+
+set(SOURCE_FILES
+        Area.h
+        Clan.h
+        Group.cpp
+        exceptions.h
+        Group.h
+        MtmSet.h
+        testMacros.h
+        World.h
+        Area.cpp
+        World.cpp Clan.cpp Mountain.cpp Mountain.h Plain.cpp Plain.h River.cpp River.h tmpWorldTests.cpp)

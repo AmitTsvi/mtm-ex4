@@ -1,4 +1,3 @@
-
 #ifndef MTM4_WORLD_H
 #define MTM4_WORLD_H
 
@@ -8,15 +7,23 @@
 
 namespace mtm{
     enum AreaType{ PLAIN, MOUNTAIN, RIVER };
-    
+
+    typedef std::shared_ptr<Area> AreaPointer;
+
     class World{
+    private:
+
+        map<string, string> group_area_map;
+        map<string, AreaPointer> area_map;
         map<string, Clan> clan_map;
-        
+
+
+
     public:
         /**
          * Empty constructor
          */
-        World();
+        World() = default;
         
         /**
          * Disable copy constructor
@@ -28,7 +35,7 @@ namespace mtm{
          */
         World &operator=(const World &) = delete;
 
-        ~World();
+        ~World() = default;
         
         /**
          * Add a new clan to the world.

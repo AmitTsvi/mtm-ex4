@@ -180,6 +180,8 @@ namespace mtm{
          */
         friend std::ostream& operator<<(std::ostream& os, const Clan& clan);
     };
+
+
 } // namespace mtm
 
 #endif //MTM4_CLAN_H
