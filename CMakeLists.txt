@@ -6,67 +6,126 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror -pedantic-error
 
 set(SOURCE_FILES
         Area.h
-        Clan.h
-        testsPart1.cpp
-        examplePart2.cpp
-        examplePart2.cpp
-        Group.cpp
-        exceptions.h
-        Group.h
-        MtmSet.h
-        testMacros.h
-        World.h)
-
-add_executable(Group_tests Group.h Group.cpp exceptions.h testMacros.h Group_test.cpp)
-
-set(SOURCE_FILES
-        Group.h Group.cpp exceptions.h testMacros.h Group_test.cpp)
-
-add_executable(Clan_tests Clan.h Clan.cpp MtmSet.h Group.h Group.cpp tmpClanTests.cpp)
-
-set(SOURCE_FILES
-        Clan.h Clan.cpp MtmSet.h Group.h Group.cpp tmpClanTests.cpp)
-
-add_executable(examplePart3 Area.h
-        Clan.h
-        Group.cpp
-        exceptions.h
-        Group.h
-        MtmSet.h
-        testMacros.h
-        World.h
-        World.cpp)
-
-set(SOURCE_FILES Area.h
-        Clan.h
-        Group.cpp
-        exceptions.h
-        Group.h
-        MtmSet.h
-        testMacros.h
-        World.h
-        World.cpp)
-
-add_executable(World_tests Area.h
+        Area.cpp
         Clan.h
         Clan.cpp
-        Group.cpp
-        exceptions.h
         Group.h
+        Group.cpp
         MtmSet.h
-        testMacros.h
-        World.h
+        Area.h
         Area.cpp
-        World.cpp Mountain.cpp Mountain.h Plain.cpp Plain.h River.cpp River.h tmpWorldTests.cpp)
+        Plain.h
+        Plain.cpp
+        Mountain.h
+        Mountain.cpp
+        River.h
+        River.cpp
+        World.h
+        World.cpp
+        exceptions.h
+        testMacros.h
+        ./test/GroupTests.cpp
+        )
+
+add_executable(Group_tests ${SOURCE_FILES})
+
 
 set(SOURCE_FILES
         Area.h
-        Clan.h
-        Group.cpp
-        exceptions.h
-        Group.h
-        MtmSet.h
-        testMacros.h
-        World.h
         Area.cpp
-        World.cpp Clan.cpp Mountain.cpp Mountain.h Plain.cpp Plain.h River.cpp River.h tmpWorldTests.cpp)
+        Clan.h
+        Clan.cpp
+        Group.h
+        Group.cpp
+        MtmSet.h
+        Area.h
+        Area.cpp
+        Plain.h
+        Plain.cpp
+        Mountain.h
+        Mountain.cpp
+        River.h
+        River.cpp
+        World.h
+        World.cpp
+        exceptions.h
+        testMacros.h
+        ./test/ClanTests.cpp
+        )
+
+add_executable(Clan_tests ${SOURCE_FILES})
+
+set(SOURCE_FILES
+        Area.h
+        Area.cpp
+        Clan.h
+        Clan.cpp
+        Group.h
+        Group.cpp
+        MtmSet.h
+        Area.h
+        Area.cpp
+        Plain.h
+        Plain.cpp
+        Mountain.h
+        Mountain.cpp
+        River.h
+        River.cpp
+        World.h
+        World.cpp
+        exceptions.h
+        testMacros.h
+        ./test/MtmSetTests.cpp
+        )
+
+add_executable(MtmSet_tests ${SOURCE_FILES})
+
+set(SOURCE_FILES
+        Area.h
+        Area.cpp
+        Clan.h
+        Clan.cpp
+        Group.h
+        Group.cpp
+        MtmSet.h
+        Area.h
+        Area.cpp
+        Plain.h
+        Plain.cpp
+        Mountain.h
+        Mountain.cpp
+        River.h
+        River.cpp
+        World.h
+        World.cpp
+        exceptions.h
+        testMacros.h
+        ./test/WorldTests.cpp
+        )
+
+add_executable(World_tests ${SOURCE_FILES})
+
+set(SOURCE_FILES
+        Area.h
+        Area.cpp
+        Clan.h
+        Clan.cpp
+        Group.h
+        Group.cpp
+        MtmSet.h
+        Area.h
+        Area.cpp
+        Plain.h
+        Plain.cpp
+        Mountain.h
+        Mountain.cpp
+        River.h
+        River.cpp
+        World.h
+        World.cpp
+        exceptions.h
+        testMacros.h
+        ./test/AreaTests.cpp
+        )
+
+add_executable(Area_tests ${SOURCE_FILES})
