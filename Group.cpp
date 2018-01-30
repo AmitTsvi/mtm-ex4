@@ -179,11 +179,10 @@ namespace mtm {
         if (getSize() == empty || opponent.getSize() == empty) {
             throw GroupCantFightEmptyGroup();
         }
-        double this_power = calcPower(), opponent_power = opponent.calcPower();
-        if (this_power == opponent_power) {
+        if (*this == opponent) {
             return DRAW;
         }
-        else if (this_power < opponent_power) {
+        else if (*this < opponent) {
             opponent.handleFightEffects(*this);
             return LOST;
         }

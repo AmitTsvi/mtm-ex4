@@ -108,6 +108,9 @@ namespace mtm{
     }
 
     bool Clan::isFriend(const Clan& other) const{
+        if (this == &other) {
+            return true;
+        }
       return (clan_friends.contains(other.clan_name));
     }
 
@@ -129,7 +132,7 @@ namespace mtm{
         std::sort(group_vector.begin(), group_vector.end(), compareToPrint);
         //Print details
         os << "Clan's name: " << clan.clan_name << endl;
-        os << "Clan's groups: " << endl;
+        os << "Clan's groups:" << endl;
         for (vector<GroupPointer>::iterator it = group_vector.begin();
                 it != group_vector.end(); ++it) {
             os << (*it)->getName() << endl;

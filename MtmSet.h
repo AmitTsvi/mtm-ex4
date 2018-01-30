@@ -22,8 +22,8 @@ namespace mtm{
             Type element;
             Node* next;
 
-            explicit Node(Type new_element): element(new_element), next(NULL){}
-            Node(const Node& node): element(node.element), next(NULL){}
+            explicit Node(Type new_element): element(new_element), next(nullptr){}
+            Node(const Node& node): element(node.element), next(nullptr){}
             //const Type *operator->() const{
             //    return &element;
             //}
@@ -45,7 +45,7 @@ namespace mtm{
              * Empty constructor. Should not be dereferenced.
              * Same as MtmSet::end()
              */
-            iterator(): node_ptr(NULL){};
+            iterator(): node_ptr(nullptr){};
             
             /**
              * Constructor of Set iterator
@@ -82,7 +82,7 @@ namespace mtm{
              * an element in the set (end())
              */
             const Type& operator*() const{
-                if (this->node_ptr == NULL){
+                if (this->node_ptr == nullptr){
                     throw NodeIsEndException();
                 }
                 return node_ptr->element;
@@ -99,7 +99,7 @@ namespace mtm{
              * an element in the set (end())
              */
             const Type *operator->() const{
-                if (this->node_ptr == NULL){
+                if (this->node_ptr == nullptr){
                     throw NodeIsEndException();
                 }
                 return &(node_ptr->element);
@@ -112,7 +112,7 @@ namespace mtm{
              * an element in the set (end())
              */
             iterator& operator++(){
-                if (this->node_ptr == NULL){
+                if (this->node_ptr == nullptr){
                     throw NodeIsEndException();
                 }
                 this->node_ptr = node_ptr->next;
@@ -127,7 +127,7 @@ namespace mtm{
              * an element in the set (end())
              */
             iterator operator++(int){
-                if (this->node_ptr == NULL){
+                if (this->node_ptr == nullptr){
                     throw NodeIsEndException();
                 }
                 iterator tmp(*this);
@@ -168,7 +168,7 @@ namespace mtm{
              * Empty constructor. Should not be dereferenced.
              * Same as MtmSet::end()
              */
-            const_iterator(): node_ptr(NULL){};
+            const_iterator(): node_ptr(nullptr){};
             
             /**
              * Constructor of Set const_iterator
@@ -214,7 +214,7 @@ namespace mtm{
              * an element in the set (end())
              */
             const Type& operator*() const{
-                if (this->node_ptr == NULL){
+                if (this->node_ptr == nullptr){
                     throw NodeIsEndException();
                 }
                 return node_ptr->element;
@@ -231,7 +231,7 @@ namespace mtm{
              * an element in the set (end())
              */
             const Type *operator->() const{
-                if (this->node_ptr == NULL){
+                if (this->node_ptr == nullptr){
                     throw NodeIsEndException();
                 }
                 return &(node_ptr->element);
@@ -244,7 +244,7 @@ namespace mtm{
              * an element in the set (end())
              */
             const_iterator& operator++() {
-                if (this->node_ptr == NULL){
+                if (this->node_ptr == nullptr){
                     throw NodeIsEndException();
                 }
                 node_ptr = node_ptr->next;
@@ -259,7 +259,7 @@ namespace mtm{
              * an element in the set (end())
              */
             const_iterator operator++(int){
-                if (this->node_ptr == NULL){
+                if (this->node_ptr == nullptr){
                     throw NodeIsEndException();
                 }
                 const_iterator tmp(*this);
@@ -291,13 +291,13 @@ namespace mtm{
          * Empty constructor
          * Creates an empty set
          */
-        MtmSet(): head(NULL){};
+        MtmSet(): head(nullptr){};
         
         /**
          * Copy constructor
          * @param set the Set to copy
          */
-        MtmSet(const MtmSet& set): head(NULL){
+        MtmSet(const MtmSet& set): head(nullptr){
             const_iterator source_it = set.begin();
             while(source_it != set.end()){
                 this->insert(*source_it);
@@ -311,7 +311,7 @@ namespace mtm{
          */
         ~MtmSet(){
             this->clear();
-            this->head = NULL;
+            this->head = nullptr;
         }
         
         /**
@@ -323,7 +323,7 @@ namespace mtm{
          * element if the element wasn't inserted.
          */
         iterator insert(const Type& elem){
-            if (head == NULL){
+            if (head == nullptr){
                 head = new Node(elem);
                 return this->begin();
             }
@@ -331,7 +331,7 @@ namespace mtm{
                 return this->find(elem);
             }
             Node *insert = head;
-            while (insert->next != NULL){
+            while (insert->next != nullptr){
                 insert = insert->next;
             }
             insert->next = new Node(elem);
@@ -353,7 +353,7 @@ namespace mtm{
                 return;
             }
             Node *erase = head;
-            while (erase->next != NULL){
+            while (erase->next != nullptr){
                 if (erase->next->element == elem){
                     Node *temp = erase->next->next;
                     delete erase->next;
@@ -390,14 +390,14 @@ namespace mtm{
          * @return true is the set is empty.
          */
         bool empty() const{
-            return (head == NULL);
+            return (head == nullptr);
         }
         
         /**
          * Empty the set, free all allocated memory in the set.
          */
         void clear(){
-            while(head != NULL){
+            while(head != nullptr){
                 this->erase(head->element);
             }
         }

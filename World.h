@@ -8,15 +8,45 @@
 namespace mtm{
     enum AreaType{ PLAIN, MOUNTAIN, RIVER };
 
-    typedef std::shared_ptr<Area> AreaPointer;
+    typedef std::shared_ptr<Area> AreaPtr;
 
     class World{
     private:
 
-        map<string, string> group_area_map;
-        map<string, AreaPointer> area_map;
+        //map<string, string> group_area_map;
+        map<string, AreaPtr> area_map;
         map<string, Clan> clan_map;
 
+        /**
+         * Finds the area in which the given group is found in
+         * @param group_name
+         * @param area_map
+         * @return iterator to the string, area pair in
+         * the map in which the group is found,
+         * else an iterator to the area map end.
+         */
+        map<string, AreaPtr>::iterator findAreaOfGroup
+                (const string& group_name){
+            for (auto it = area_map.begin(); it != area_map.end(); ++it) {
+                    MtmSet<string>  group_names((it->second)->getGroupsNames());
+                    if(group_names.contains(group_name)) {
+                        return it;
+                    }
+            }
+            return area_map.end();
+        }
+
+        map<string, AreaPtr>::const_iterator findAreaOfGroup
+                (const string& group_name) const{
+            MtmSet<string> group_names;
+            for (auto it = area_map.begin(); it != area_map.end(); ++it) {
+                MtmSet<string>  group_names((it->second)->getGroupsNames());
+                if(group_names.contains(group_name)) {
+                    return it;
+                }
+            }
+            return area_map.end();
+        }
 
 
     public:

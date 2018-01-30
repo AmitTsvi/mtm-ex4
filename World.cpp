@@ -13,8 +13,7 @@
 namespace mtm{
 
     const int empty = 0;
-    typedef map<string, string>::iterator GroupAreaMapIterator; //to change!!!!!!
-    typedef map<string, AreaPointer>::iterator AreaMapIterator;
+    typedef map<string, AreaPtr>::iterator AreaMapIterator;
     typedef map<string, Clan>::iterator ClanMapIterator;
 
 
@@ -38,19 +37,19 @@ namespace mtm{
             throw WorldAreaNameIsTaken();
         }
         if (type == PLAIN) {
-            AreaPointer plain_ptr(new Plain(area_name));
+            AreaPtr plain_ptr(new Plain(area_name));
             area_map.insert
-                    (std::pair<string, AreaPointer>(area_name, plain_ptr));
+                    (std::pair<string, AreaPtr>(area_name, plain_ptr));
         }
         else if (type == MOUNTAIN) {
-            AreaPointer mountain_ptr(new Mountain(area_name));
+            AreaPtr mountain_ptr(new Mountain(area_name));
             area_map.insert(
-                    std::pair<string, AreaPointer>(area_name, mountain_ptr));
+                    std::pair<string, AreaPtr>(area_name, mountain_ptr));
         }
         else if (type == RIVER) {
-            AreaPointer river_ptr(new River(area_name));
+            AreaPtr river_ptr(new River(area_name));
             area_map.insert(
-                    std::pair<string, AreaPointer>(area_name, river_ptr));
+                    std::pair<string, AreaPtr>(area_name, river_ptr));
         }
     }
 
@@ -66,8 +65,7 @@ namespace mtm{
         if (num_children == empty && num_adults == empty) {
             throw WorldInvalidArgument();
         }
-        GroupAreaMapIterator group_it = group_area_map.find(group_name);
-        if (group_it != group_area_map.end()) {
+        if (findAreaOfGroup(group_name) != area_map.end()) {
             throw WorldGroupNameIsTaken();
         }
         try {
@@ -83,8 +81,6 @@ namespace mtm{
         Group group_to_add(group_name, num_children, num_adults);
         (clan_map.at(clan_name)).addGroup(group_to_add);
         (area_map.at(area_name))->groupArrive(group_name, clan_name, clan_map);
-        group_area_map.insert(
-                std::pair<string, string>(group_name, area_name));
     }
 
     void World::makeReachable(const string& from, const string& to){
@@ -97,9 +93,8 @@ namespace mtm{
     }
 
     void World::moveGroup(const string& group_name, const string& destination){
-        try {
-            group_area_map.at(group_name);
-        } catch (std::out_of_range& e) {
+        AreaMapIterator origin = findAreaOfGroup(group_name);
+        if (origin == area_map.end()) {
             throw WorldGroupNotFound();
         }
         try {
@@ -107,11 +102,10 @@ namespace mtm{
         } catch (std::out_of_range& e) {
             throw WorldAreaNotFound();
         }
-        string origin = (group_area_map.find(group_name))->second;
-        if (origin == destination) {
+        if (origin->first == destination) {
             throw WorldGroupAlreadyInArea();
         }
-         if (!(area_map.find(origin)->second)->isReachable(destination)) {
+         if (!(area_map.find(origin->first)->second)->isReachable(destination)) {
             throw WorldAreaNotReachable();
         }
         //Find group's clan
@@ -126,9 +120,7 @@ namespace mtm{
         //Group arrive to destination
         (area_map.find(destination)->second)->groupArrive(group_name, clan, clan_map);
         //Group leave original location
-        (area_map.find(origin)->second)->groupLeave(group_name);
-        //Change group placement in group area map
-        group_area_map.at(group_name) = destination;
+        (area_map.find(origin->first)->second)->groupLeave(group_name);
     }
 
     void World::makeFriends(const string& clan1, const string& clan2){
@@ -169,8 +161,7 @@ namespace mtm{
                 GroupPointer group_ptr = (it->second).getGroup(group_name);
                 os << (*group_ptr);
                 os << "Group's current area: "
-                   << (group_area_map.find(group_name))->second
-                   << std::endl;
+                   << (findAreaOfGroup(group_name)->first) << std::endl;
                 flag = true;
                 break;
             }
